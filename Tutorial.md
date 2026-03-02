@@ -280,15 +280,9 @@ mv Malus_domestica_golden.ASM211411v1.pep.all.fa md.pep
 
 # 我们还差软件
 我们还需要2个十分重要的软件：
-- blast
+- blast+
 - hmmsearch
-要想很方便的安装这些软件，我们有一步一步安装法与一劳永逸法。
-## 传统办法
-进入[blast+](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)下载页面：
-```bash
-wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
-tar -zxvf ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
-```
+要想很方便的安装这些软件，我们有**本本分分安装法**与**一劳永逸法**。我们先看看一劳永逸法，因为绝大部分的软件都可以用这个方法，然后在看本本分分安装法，因为有些特殊的软件可能必须得自己安装。
 
 ## 一劳永逸之Anaconda
 我们要下载一个叫做anaconda的东西，你可以把它理解为很多软件都能通过它安装。等我们安装好我们就可以通过`conda install`来安装我们需要的分析包。如果你学过python应该对`pip install`不陌生，它们都是用来安装包的，而且conda可以用来安装python。
@@ -310,7 +304,7 @@ agreement.
 Please, press ENTER to continue
 >>> 
 ```
-长按Enter回车键直到：
+长按Enter回车键（一般按两下也可以）直到：
 ```bash
 Do you accept the license terms? [yes|no]
 >>> 
@@ -326,3 +320,39 @@ Anaconda3 will now be installed into this location:
 >>> 
 ```
 这里一般情况下是长按Enter即可，但是你也可以选择安装到其他地址，比如我就会安装到移动硬盘里`/Volumes/MyPSD/anaconda3`。
+
+然后我们才正式进入到安装环节，自此我们把Anaconda3简称为conda。首先我们需要了解一个概念叫**环节配置**，我们经常会看到别人说配环境。如何通俗的理解？
+环境的全称是“虚拟环境”，我们可以创建一个新环境，同时规定好python版本。我们可能同一道分析使用到的软件依赖于不同版本的python，有的是python3有的是python2，使用我们就需要一个python3的虚拟环境和一个python2的虚拟环境。环境像是软件运行必须的氛围，如果把人比作软件，环境就像是图书馆和操场，有人在操场才可以学习（我知道这个例子很奇葩），有人在图书馆才能学习。环境就是软件运行的条件。
+
+我们可以这样子配置环境并激活与关闭环境：    （请一行一行复制，我的意思是不要点右边这个一键复制的按钮哦!）
+```bash
+conda create -n env1 python=3.9
+conda activate env1
+conda deactivte env1
+```
+- `create`是创建虚拟环境的指令
+- `-n`是命名为，`env1`是环境名称，可以修改成别的
+- `python=3.9`设定python版本为3.9（可以不加，就会使用默认的python版本），我当时默认是安装3.13.2
+- `activate`是激活，`deactivate`是关闭
+
+后期我们可能会用的一些软件是需要 Intel (x86) 版本的 Python 环境，我们可以创建一个：
+```bash
+CONDA_SUBDIR=osx-64 conda create -n x86env
+conda init x86env
+conda activate x86env
+conda config --env --set subdir osx-64
+```
+我们将使用`x86env`这个虚拟环境安装各种软件来做分析。
+到这一步我们才开始真正安装我们需要的软件：
+```bash
+conda install -c bioconda blast+
+conda install -c bioconda hmmsearch
+```
+ 
+## 传统办法
+进入[blast+](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)下载页面：
+```bash
+wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
+tar -zxvf ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
+```
+
