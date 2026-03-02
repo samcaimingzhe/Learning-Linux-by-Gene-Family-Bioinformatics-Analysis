@@ -290,7 +290,7 @@ wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.1
 tar -zxvf ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
 ```
 
-## 一劳永逸之anaconda
+## 一劳永逸之Anaconda
 我们要下载一个叫做anaconda的东西，你可以把它理解为很多软件都能通过它安装。等我们安装好我们就可以通过`conda install`来安装我们需要的分析包。如果你学过python应该对`pip install`不陌生，它们都是用来安装包的，而且conda可以用来安装python。
 你可以选择进入[anaconda](https://repo.anaconda.com/archive/)的下载网址，这里有非常非常多可以选择的。我们是为了安装在终端，所以选择后缀为.sh的。里面有MacOSX、Windows和Linux三种系统可以选择。
 以MacOS为例，我们下载并执行：
@@ -310,7 +310,19 @@ agreement.
 Please, press ENTER to continue
 >>> 
 ```
-长按Enter回车键，
+长按Enter回车键直到：
+```bash
+Do you accept the license terms? [yes|no]
+>>> 
+```
+输入yes：
+```bash
+Anaconda3 will now be installed into this location:
+/Users/YourUserName/anaconda3
 
-
-
+  - Press ENTER to confirm the location
+  - Press CTRL-C to abort the installation
+  - Or specify a different location below
+>>> 
+```
+这里一般情况下是长按Enter即可，但是你也可以选择安装到其他地址，比如我就会安装到移动硬盘里`/Volumes/MyPSD/anaconda3`。
