@@ -107,7 +107,7 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 <img width="803" height="548" alt="Image" src="https://github.com/user-attachments/assets/83626c6d-fc34-4a85-9d26-f4c31628879c" />
 
 
-找到pfam号后点击进入网页，点击左边的Profile HMM，看到中间的Download继续点击。我们所需的Profile HMM文件就下载下来了，格式为压缩包gz。可以双击解压，如果你有安装相关的解压软件。或者进入终端：
+找到pfam号后点击进入网页，点击左边的Profile HMM，看到中间的Download继续点击。我们所需的Profile HMM文件就下载下来了，格式为压缩包gz。可以双击解压，如果你有安装相关的解压软件，或者进入终端（建议直接使用[Warp](https://www.warp.dev/)）：
 
 > 我们要开始了解Linux command了！
 
@@ -276,12 +276,13 @@ mv Malus_domestica_golden.ASM211411v1.pep.all.fa md.pep
 - *代表任意长度的任意字符串，所以gzip -d *.gz的意思是把尾巴是.gz的全部文件都解压。
 - mv 文件1 名称2 可以把文件1的名称改为名称2。
 
+如果你想查看当前路径可以用`pwd`，如果想知道当前路径都有什么文件可以使用`ls`，或者更多变体比如`ls -l`、`ls -lah`。如果想看一个文件的内容可以使用`less md.gff3`，退出按`q`。
 于是乎我们拥有了鉴定基因家族蛋白的全部文件了。我们还差什么呢？
 
 # 我们还差软件
 我们还需要2个十分重要的软件：
-- blast+
-- hmmsearch
+- blast
+- hmmer
 要想很方便的安装这些软件，我们有**本本分分安装法**与**一劳永逸法**。我们先看看一劳永逸法，因为绝大部分的软件都可以用这个方法，然后在看本本分分安装法，因为有些特殊的软件可能必须得自己安装。
 
 ## 一劳永逸之Anaconda
@@ -338,21 +339,51 @@ conda deactivte env1
 后期我们可能会用的一些软件是需要 Intel (x86) 版本的 Python 环境，我们可以创建一个：
 ```bash
 CONDA_SUBDIR=osx-64 conda create -n x86env
-conda init x86env
 conda activate x86env
 conda config --env --set subdir osx-64
 ```
-我们将使用`x86env`这个虚拟环境安装各种软件来做分析。
-到这一步我们才开始真正安装我们需要的软件：
+我们将使用`x86env`这个虚拟环境安装各种软件来做分析。如果出现了`CondaError: Run 'conda init' before 'conda activate'`就重启终端就好。
+到这一步我们才开始真正安装我们需要的软件（遇到`Proceed ([y]/n)? `一概y）：
 ```bash
-conda install -c bioconda blast+
-conda install -c bioconda hmmsearch
+conda install -c bioconda blast
+conda install -c bioconda hmmer
 ```
+我们就安装好了！更多功能可详见`conda -h`或者`conda --help`。
+接下来我们来看看本本分分安装法是怎么回事。
  
-## 传统办法
+## 本本分分之什么软件都是这个法
 进入[blast+](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)下载页面：
 ```bash
 wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
 tar -zxvf ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
+cd /ncbi-blast-2.17.0+/bin
 ```
+进入`bin`我们就会发现需要的软件都在里面比如`blastn`、`blastp`、`blastx`、`tblastn`等等。
+blast全称 Basic Local Alignment Search Tool，翻译为基本局部比对搜索工具，其功能是寻找从两个序列中找到最大的相似片段，它会用目标序列和数据库中的序列一一比对，按照参数过滤出最相似的一批序列。所以这些工具都是blast，他们的功能可以简单解释为：
+- `blastn`：用核苷酸比对核苷酸库
+- `blastp`：用蛋白质比对蛋白质库
+- `blastx`：核苷酸翻译为蛋白质，再用蛋白质比对蛋白质库
+- `tblastn`：核苷酸库翻译为蛋白质库，再用蛋白质比对蛋白质库
+
+目前我们需要使用的是`blastp`，我们可以简单用`./ncbi-blast-2.17.0+/bin/blastp -h`查看使用方法。不过这会很麻烦每一次都要输入这么长的代码。
+我们有办法少写点吗？包的包的：
+第一步是`vim ~/.zshrc`（这些文件名前面带.的都会被隐藏起来），会出现
+```bash
+Swap file "~/.zshrc.swp" already exists!
+[O]pen Read-Only, (E)dit anyway, (R)ecover, (D)elete it, (Q)uit, (A)bort: 
+```
+我们输入`e`即可，找一个空行，之前讲`vim`的时候我们提到过想输入要先按`i`，然后贴上：
+```bash
+export PATH="/Users/YourUserName/Desktop/GeneFamilyAnalysis/ncbi-blast-2.17.0+/bin:$PATH"
+```
+> 其中`/Users/YourUserName/Desktop/GeneFamilyAnalysis`是我们当时`wget`的路径，这个是每个人都不一样的。也是我们唯一需要自己修改的部分。
+
+然后我们`:wq`退出后再`source ~/.zshrc`。我们就可以使用：
+```bash
+blastp -h
+```
+
+
+
+
 
