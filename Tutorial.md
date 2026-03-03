@@ -68,15 +68,22 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 
 同样在此罗列一些植物基因组数据库，方便我们后续下载基因组
 - Ensembl Plants：大部分植物 https://plants.ensembl.org/index.html
+- Phytozome：大部分植物 https://phytozome-next.jgi.doe.gov/ （我是最不推荐这个的，因为又要注册账号，下载又慢）
 - Genome Database for Rosaceae (GDR)：蔷薇科植物 https://www.rosaceae.org/
 - Citrus Genome Database (CGD)：柑橘属植物 https://www.citrusgenomedb.org/
-- Pear Mutiomic Database (PearMODB)：梨属植物 https://pearomics.njau.edu.cn/
 - Pear Genomic Database (PGDB)：梨属植物 http://pyrusgdb.sdau.edu.cn/
 - GrapeGenomics：葡萄科植物 https://www.grapegenomics.com/
 - Grapedia：葡萄科植物 https://grapedia.org/genomes/
 - Rice Genome Annotation Project：水稻 https://rice.uga.edu/
 - Sol Genomic Network：茄科植物 https://solgenomics.net/
 - International Wheat Genome Sequencing Consortium (IWGSC)：小麦 https://www.wheatgenome.org/
+- SoyBase：大豆 https://www.soybase.org/
+- MaizeGDB：玉米 https://www.maizegdb.org/
+- COTTONGEN：棉花 https://www.cottongen.org/
+- CGD：菊花 https://cgd.njau.edu.cn
+- CuGenDBv2：葫芦科 http://cucurbitgenomics.org/v2/
+
+BRAD：十字花科 http://brassicadb.cn/#/
 
 特别特别特殊的物种，可以在论文里查看是从哪获取的，可以到NCBI到数据库里再找找看。同时请注意并非所有的基因组都来自公共数据库，他们可能来自一些实验室内部的测序数据。
 
@@ -108,6 +115,7 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 
 还有一个办法，前提是我们老师有给我们一些参考的蛋白质，假设你有一条“未知蛋白1号”的fasta。可以贴到[CD-Search](https://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi)里，Search against database选择Pfam，可以帮我们找到一些可能的pfam号。
 <img width="1439" height="792" alt="截屏2026-03-03 上午2 18 13" src="https://github.com/user-attachments/assets/b3d6aa30-d786-4852-a1c4-d412f0b86de8" />
+
 总而言之，我们的办法有很多。
 
 找到pfam号后点击进入网页，点击左边的Profile HMM，看到中间的Download继续点击。我们所需的Profile HMM文件就下载下来了，格式为压缩包gz。可以双击解压，如果你有安装相关的解压软件，或者进入终端（建议直接使用[Warp](https://www.warp.dev/)）：
@@ -464,6 +472,14 @@ seqkit grep -f md.id md.pep -o md.galt.pep
 非常让人舒心，描述为“beta-1,3-galactosyltransferase; Provisional”，来自文章 Identification of a novel group of putative Arabidopsis thaliana beta-(1,3)-galactosyltransferases.Plant Mol Biol 2008 Sep ; 68(1-2):43-59
 
 **自此我们可以宣布我们找到了全部可能的苹果GALT基因家族蛋白。**
+
+## 你可曾想过写个脚本批量获取不同物种的GALTs
+这是一个很有挑战的想法，说明你很想了解shell脚本是这么回事，我们安装Anaconda下载的文件就是一个巨大的shell脚本。不过我们会写一个很小很小的shell脚本。
+那我们就定8个物种来做做吧～比如：拟南芥、苹果、梨、橙子、葡萄、草莓、桃子、番茄
+
+```bash
+
+```
 
 ## 一些迷思
 你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
