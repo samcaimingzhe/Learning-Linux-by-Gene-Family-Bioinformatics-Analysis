@@ -474,12 +474,40 @@ seqkit grep -f md.id md.pep -o md.galt.pep
 
 ## 你可曾想过写个脚本批量获取不同物种的GALTs
 这是一个很有挑战的想法，说明你很想了解shell脚本是这么回事，我们安装Anaconda下载的文件就是一个巨大的shell脚本。不过我们会写一个很小很小的shell脚本。
-那我们就定8个物种来做做吧～比如：拟南芥、苹果、梨、橙子、葡萄、草莓、桃子、番茄
-
+那我们就定8个物种来做做吧～比如：拟南芥、苹果、梨、橙子、葡萄、草莓、桃子、番茄。
+首先我提供一份下载链接，我们先`vim genome.url`：
 ```bash
-
+https://ftp.ebi.ac.uk/ensemblgenomes/pub/release-62/plants/gff3/arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.62.gff3.gz
+https://ftp.ebi.ac.uk/ensemblgenomes/pub/release-62/plants/fasta/arabidopsis_thaliana/dna/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/assembly/Antonovka_hapolomeA.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/genes/Antonovka_hapolomeA_pep.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/genes/Antonovka_hapolomeA.gff3.gz
+https://grapedia.org/wp-content/uploads/2023/11/T2T_ref.zip
+https://grapedia.org/wp-content/uploads/2024/11/PN40024_5.1_on_T2T_ref_with_names.zip
+https://grapedia.org/wp-content/uploads/2025/03/5.1_on_T2T_ref_main_variants.zip
+https://solgenomics.net/ftp/tomato_genome/annotation/ITAG4.0_release/ITAG4.0_proteins.fasta
+https://solgenomics.net/ftp/tomato_genome/annotation/ITAG4.0_release/ITAG4.0_gene_models.gff
+https://solgenomics.net/ftp/tomato_genome/assembly/build_4.00/S_lycopersicum_chromosomes.4.00.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Pyrus_x_bretschneideri/Pbretschneideri-genome.v1.1/assembly/pbr.v1.1.chr.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Pyrus_x_bretschneideri/Pbretschneideri-genome.v1.1/genes/pbr.v1.1.pep.gz
+https://www.rosaceae.org/rosaceae_downloads/Pyrus_x_bretschneideri/Pbretschneideri-genome.v1.1/genes/pbr.v1.1.chr.gff3.gz
+https://www.rosaceae.org/rosaceae_downloads/Fragaria_vesca/Fvesca_NAU-CN_v1.0/assembly/Fragaria_vesca_v6_genome.fasta.gz
+https://www.rosaceae.org/rosaceae_downloads/Fragaria_vesca/Fvesca_NAU-CN_v1.0/genes/Fragaria_vesca_v6_proteins.fasta.gz
+https://www.rosaceae.org/rosaceae_downloads/Fragaria_vesca/Fvesca_NAU-CN_v1.0/genes/Fragaria_vesca_v6_genome.gff.gz
+https://www.citrusgenomedb.org/citrus_downloads/Citrus_sinensis/Cs_Neixiu_v1.0/assembly/Neixiu_assembly-renamed.fa.gz
+https://www.citrusgenomedb.org/citrus_downloads/Citrus_sinensis/Cs_Neixiu_v1.0/genes/Chr_genome_all_transcripts_final_gene.gff3.gz
+https://www.citrusgenomedb.org/citrus_downloads/Citrus_sinensis/Cs_Neixiu_v1.0/genes/Neixiu_v1-proteins.fasta.gz
+https://www.rosaceae.org/rosaceae_downloads/Prunus_persica/Ppersica_Lovell_2D_v3.0/genes/Lovell_2D_v3.0.genes.gff3.gz
+https://www.rosaceae.org/rosaceae_downloads/Prunus_persica/Ppersica_Lovell_2D_v3.0/genes/Lovell_2D_v3.0.proteins.fa.gz
+https://www.rosaceae.org/rosaceae_downloads/Prunus_persica/Ppersica_Lovell_2D_v3.0/assembly/Lovell_2D_v3.0.scaffold.fa.gz
 ```
-
+我们可以先写一个下载for循环来试试看：
+```bash
+for url in genome.url;
+do
+    wget -c "$url"
+done
+```
 ## 一些迷思
 你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
 **必要不充分条件**，功能相似的序列通常长得很像，但长得像的序列功能不一定一样。
