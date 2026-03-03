@@ -718,7 +718,8 @@ done
 # 4. Merge All Results
 # ==========================================
 echo ">>> Merging all final sequences..."
-cat *."${GENE_NAME}".pep > Merged."${GENE_NAME}".pep 
+cat *."${GENE_NAME}".pep > Merged.unsimplified."${GENE_NAME}".pep
+seqkit replace -p "\s.+" -r "" Merged.unsimplified."${GENE_NAME}".pep > Merged.simplified."${GENE_NAME}".pep
 
 echo "✅ Success! All sequences have been merged into Merged.${GENE_NAME}.pep"
 ```
