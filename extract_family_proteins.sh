@@ -34,31 +34,31 @@ echo "=========================================="
 # ==========================================
 # 2. Main Pipeline Loop
 # ==========================================
-for file in /proteins/*.all.pep; do
+for file in proteins/*.all.pep; do
     # Extract the filename prefix (e.g., get "pb" from "pb.pep")
-    prefix=${file%.all.pep}
+    prefix=$(basename "$file" .all.pep)
     echo ">>> Processing species: $prefix ..."
 
     # 1. HMM search (Using the downloaded .hmm file directly)
-    hmmsearch --tblout /result/${prefix}.hmm.res ${HMM_MODEL}.hmm /proteins/${prefix}.all.pep > /dev/null
+    hmmsearch --tblout result/${prefix}.hmm.res ${HMM_MODEL}.hmm proteins/${prefix}.all.pep > /dev/null
     
     # 2. Extract HMM IDs (excluding comment lines starting with '#')
-    awk '{print $1}' /result/${prefix}.hmm.res | grep -v '#' > /result/${prefix}.hmm.id
+    awk '{print $1}' result/${prefix}.hmm.res | grep -v '#' > result/${prefix}.hmm.id
     
     # 3. Build BLAST database (Output to log to keep terminal clean)
-    makeblastdb -in /proteins/${prefix}.all.pep -input_type fasta -parse_seqids -dbtype prot -out /databases/${prefix}_db -logfile /dev/null
+    makeblastdb -in proteins/${prefix}.all.pep -input_type fasta -parse_seqids -dbtype prot -out databases/${prefix}_db -logfile /dev/null
     
     # 4. BLASTP alignment
-    blastp -task blastp -db /databases/${prefix}_db -query "${BLAST_QUERY}" -evalue "${EVALUE}" -outfmt 6 -out /result/${prefix}.blast.res
+    blastp -task blastp -db databases/${prefix}_db -query "${BLAST_QUERY}" -evalue "${EVALUE}" -outfmt 6 -out result/${prefix}.blast.res
     
     # 5. Extract and deduplicate BLAST IDs
-    awk '{print $2}' /result/${prefix}.blast.res | sort | uniq > /result/${prefix}.blast.id
+    awk '{print $2}' result/${prefix}.blast.res | sort | uniq > result/${prefix}.blast.id
     
     # 6. Get the intersection of HMM and BLAST IDs
-    grep -Fxf /result/${prefix}.blast.id /result/${prefix}.hmm.id > /result/${prefix}.final.id
+    grep -Fxf result/${prefix}.blast.id result/${prefix}.hmm.id > result/${prefix}.final.id
     
     # 7. Extract the final protein sequences
-    seqkit grep -f /result/${prefix}.final.id /proteins/${prefix}.all.pep  -o /result/${prefix}.${GENE_NAME}.pep
+    seqkit grep -f result/${prefix}.final.id proteins/${prefix}.all.pep  -o result/${prefix}.${GENE_NAME}.pep
     
     echo "$prefix Done"
     echo "------------------------------------"
@@ -68,7 +68,7 @@ done
 # 3. Merge All Results
 # ==========================================
 echo ">>> Merging all final sequences..."
-cat /result/*."${GENE_NAME}".pep > /result/Merged."${GENE_NAME}".unsimplified.pep
-seqkit replace -p "\s.+" -r "" Merged."${GENE_NAME}".unsimplified.pep > /result/Merged."${GENE_NAME}".simplified.pep
+cat result/*."${GENE_NAME}".pep > result/Merged."${GENE_NAME}".unsimplified.pep
+seqkit replace -p "\s.+" -r "" result/Merged."${GENE_NAME}".unsimplified.pep > result/Merged."${GENE_NAME}".simplified.pep
 
 echo "Success! All sequences have been merged into Merged.${GENE_NAME}.simplified.pep"
