@@ -713,8 +713,7 @@ for file in *.pep; do
     
     # 7. Extract the final protein sequences
     # Note: Added the species prefix to the sequence ID to avoid duplicates when merging!
-    seqkit grep -f ${prefix}.final.id ${prefix}.pep | \
-    seqkit replace -p "^" -r "${prefix}_" > ${prefix}."${GENE_NAME}".pep
+    seqkit grep -f ${prefix}.final.id ${prefix}.pep  -o ${prefix}.${GENE_NAME}.pep
     
     echo "$prefix Done"
     echo "------------------------------------"
