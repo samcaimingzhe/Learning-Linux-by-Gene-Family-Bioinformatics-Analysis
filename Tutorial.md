@@ -106,6 +106,9 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 
 <img width="803" height="548" alt="Image" src="https://github.com/user-attachments/assets/83626c6d-fc34-4a85-9d26-f4c31628879c" />
 
+还有一个办法，前提是我们老师有给我们一些参考的蛋白质，假设你有一条“未知蛋白1号”的fasta。可以贴到[CD-Search](https://www.ncbi.nlm.nih.gov/Structure/cdd/wrpsb.cgi)里，Search against database选择Pfam，可以帮我们找到一些可能的pfam号。
+<img width="1439" height="792" alt="截屏2026-03-03 上午2 18 13" src="https://github.com/user-attachments/assets/b3d6aa30-d786-4852-a1c4-d412f0b86de8" />
+总而言之，我们的办法有很多。
 
 找到pfam号后点击进入网页，点击左边的Profile HMM，看到中间的Download继续点击。我们所需的Profile HMM文件就下载下来了，格式为压缩包gz。可以双击解压，如果你有安装相关的解压软件，或者进入终端（建议直接使用[Warp](https://www.warp.dev/)）：
 
@@ -419,12 +422,15 @@ awk '{print $1}' hmm.res | grep -v '#' > hmm.id
 ```bash
 makeblastdb -in md.pep -input_type fasta -parse_seqids -dbtype prot -out md
 blastp -task blastp -db md -query ath.galt.pep -evalue 10 -outfmt 6 -out blast.res
-awk '{print $2}' blast.res > blast.id
+awk '{print $2}' blast.res > blast.id1
+sort blast.id1 | uniq > blast.id
 ```
 - `-query`：表示输入文件，query这个单词会经常出现，可以理解为“灰姑娘的水晶鞋”，在此也是我们的拟南芥GALT蛋白序列
 - `-db md`：表示选择数据库，之前`makeblastdb`的时候`-out md`，所以蛋白质数据库的前缀都是`md`
 - `-evalue 10`：表示1e-10，是一个很常用的e-value， e-value越小，筛选条件越严格，得到的序列数量就越少
 - `-outfmt 6`：按照第6种格式表格输出，还有非常多不同的格式
+- `sort`：表示排序
+- `uniq`：表示去重复
 
 可能会有同学问到，为什么已经是`blastp`了，还需要注明`-task blastp`，这不是多此一举吗？有这样的疑问是很好的，我也思考过为什么。答案就在`blastp -help`里，我们会看到：
 ```bash
@@ -434,9 +440,31 @@ awk '{print $2}' blast.res > blast.id
    Default = `blastp'
 ```
 如果我们不使用其他变体，那默认就是`-task blastp`，其实也可以不注明。这里是希望大家哪怕在复制粘贴的时候也要保持好奇心，感到奇怪就提出问题并寻找答案。所以以上的一些部分其实可以省略，有默认数值。
+可能会有同学还会问到，为什么`hmm.id`不用去重复，而`blastp`需要。因为同一个苹果的蛋白质可能被多个AtGALT选中，毕竟是基因家族，蛋白质之间都非常相似，所以我们要去重复。
 
 自此我们拥有了`hmm.id`和`blast.id`，我们取二者交集就是我们的基因家族蛋白候选成员了，注意这里我们的描述是**候选成员**。
 ```bash
-
+grep -Fxf blast.id hmm.id > md.id
 ```
+我们可以用这一份蛋白质ID来提取序列了。需要一个新软件叫`seqkit`：``
+```bash
+conda install -c bioconda seqkit
+seqkit grep -f md.id md.pep -o md.galt.pep
+```
+如果你想简单查看某一个蛋白质的序列，比如ANT15A011410.1，可以使用`seqkit grep -p "ANT15A011410.1" md.pep`会打印出来。
+**恭喜大家，我们已经初步筛选出苹果GALT基因家族的候选蛋白了！！！**
 
+## 保守结构域预测
+完成这一步我们才能说真的确定这些蛋白质是基因家族蛋白而非候选蛋白。需要使用[Batch CD-Search](https://www.ncbi.nlm.nih.gov/Structure/bwrpsb/bwrpsb.cgi)或者[SMART](https://smart.embl.de/)。但是SMART在网页端不能进行批量检测，只能一条一条检测。虽然它们提供了一份perl脚本，但是很容易报错，需要额外安装很多包。目前来看是没必要使用这个脚本的。
+我们将`md.galt.pep`上传后按照默认选项下载文件即可，后续会用到这个文件。默认文件名是`hitdata.txt`。
+<img width="1229" height="659" alt="截屏2026-03-03 上午2 36 06" src="https://github.com/user-attachments/assets/5b0dce1e-d234-4f37-99e8-c4c0d337b23c" />
+
+我们注意到Galactosyl_T肯定是我们要的结构域，但PLN03193是什么？看起来很重要因为每一个蛋白质都有这个结构域。我们可以直接去NCBI里搜索，[结果在这](https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=178735)：
+非常让人舒心，描述为“beta-1,3-galactosyltransferase; Provisional”，来自文章 Identification of a novel group of putative Arabidopsis thaliana beta-(1,3)-galactosyltransferases.Plant Mol Biol 2008 Sep ; 68(1-2):43-59
+
+**自此我们可以宣布我们找到了全部可能的苹果GALT基因家族蛋白。**
+
+## 一些迷思
+你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
+**必要不充分条件**，功能相似的序列通常长得很像，但长得像的序列功能不一定一样。
+是否存在一些蛋白质变异的可能已经让我吗无法筛选出来，缺又默默行使着它们的生物学功能，也许吧，也许是存在的，虽然可能性很小，我们学高等数学的时候就知道“概率为0的事件也有可能发生”。这世界千千万万，总有我们抓不住的东西。生物信息学只是一套分析法，其目的本身就是为生物学带来计算机给人类的一大优势——效率。等我们做到后面就会发现，可能我们发现了20个甚至200个有潜在价值的蛋白质，一做转录组分析看表达量就会大发现。根本没啥表达量，我们就会着重关注表达量高的家族成员。会进一步筛选出更加有分析价值的成员。最后我们很可能只会锁定个位数个成员做qPCR。所以我们做的家族分析本质上就是一套流程化的分析法。在此仅产生一些小小的思考足矣。
