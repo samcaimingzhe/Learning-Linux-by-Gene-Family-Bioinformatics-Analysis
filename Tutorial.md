@@ -585,6 +585,45 @@ cat Merged.galt.id
 
 我们会发现这个多剪切本的情况只出现在Cs中，因为序列不多我们可以自己手动删除。这里我贴上删除好的，大家可以自行`vim`一个新的`Merged.galt.id.1`，可以用Excel打开，也可以先`cp Merged.galt.id Merged.galt.id.1`后再删除里面个别剪切本，每一次修改文件都`cp`一份备份，这是一个需要养成的好习惯：
 ```bash
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.1
+seqkit grep -f Merged.galt.id.1 Merged.galt.simplified.pep -o Merged.galt.simplified.1.pep
+clustalw
+```
+或许你也注意到在刚才我们运行的时候出现了：
+```bash
+The following sequences are too divergent to be aligned:
+           Csi05G024070.1 and Csi02G007780.1 (distance 1.11)
+           Csi05G024070.1 and Csi02G031570.1 (distance 1.18)
+           Csi05G024070.1 and Csi04G026790.1 (distance 1.16)
+           Csi05G046350.1 and Csi05G024070.1 (distance 1.11)
+           Csi06G001250.1 and Csi05G024070.1 (distance 1.11)
+(All distances should be between 0.0 and 1.0)
+This may not be fatal but you have been warned!
+SUGGESTION: Remove one or more problem sequences and try again
+Continue (y/n) ? [y]: 
+```
+也就是说`Csi05G024070.1`跟这些序列遗传距离特别远。我们构建的时候建议删除。所以我们现在需要终止软件。最快的办法就是输入`control + c`，然后：
+```bash
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.2
+seqkit grep -f Merged.galt.id.2 Merged.galt.simplified.pep -o Merged.galt.simplified.2.pep
+clustalw
+```
+结果会发现`Csi09G015180.1`依旧没有因为我们删除了其他剪切本而有所变化，所以我们需要继续删除`Csi09G015180.1`更新为`Merged.galt.id.3`:
+```bash
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.3
+seqkit grep -f Merged.galt.id.3 Merged.galt.simplified.pep -o Merged.galt.simplified.3.pep
+clustalw
+```
+自此我们构建好进化树了，可是我们目前的基因名称太原始了，导致树不是很好看，我们能不能修改一下命名呢？
+```bash
+cp Merged.galt.id.3 rename.id
+```
+用Excel打开`rename.id`进行操作，可以在第二列按照自己的意愿命名，最后保存为原本的格式就好。这里可以直接下载我处理好的：
+```bash
 
 ```
+
+
+
+
 
