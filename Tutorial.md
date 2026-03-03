@@ -121,10 +121,10 @@ cd GeneFamilyAnalysis
 mv ~/Downloads/PF01762.hmm.gz ~/Desktop/GeneFamilyAnalysis
 gzip -d PF01762.hmm.gz
 ```
-- cd是change directory，我们想到达哪个文件夹就需要对应的路径。
-- mkdir是make directory，新建一个文件夹。
-- mv是move，把文件移动到其他路径。
-- gzip是压缩文件为gz压缩包的工具，-d是使用解压功能，这会把PF01762.hmm.gz解压为PF01762.hmm。
+- `cd`：change directory，我们想到达哪个文件夹就需要对应的路径。
+- `mkdir`：make directory，新建一个文件夹。
+- `mv`：move，把文件移动到其他路径。
+- `gzip`：压缩文件为gz压缩包的工具，-d是使用解压功能，这会把PF01762.hmm.gz解压为PF01762.hmm。
 
 如果你想知道我们目前在哪个文件夹可以使用`pwd`，意思是print working directory。如果在打开终端后输入就会得到`/Users/YourUserName`，这里YourUserName就是你电脑的名字，一般 Macbook 就是你自己的名字，是你一开始在电脑里设定好的，Linux会是`/home`，Windows的WSL也是`/home`。我们可以用`~/`代替。这也就是为什么我们一开始`cd ~/Desktop`。
 
@@ -149,7 +149,7 @@ gzip -d PF01762.hmm.gz
 ```bash
 vim at.galt.pep
 ```
-我们会进入这个文件，点击键盘 **i键**，代表insert，我们会看到终端左下角出现了**-- INSERT --**，这说明我们可以写入，我们把公共复制的fasta文本粘贴完后点击键盘 **esc键**，然后输入**:wq**，代表write和quit。这样子我们就写入好一个at.galt.pep了。
+我们会进入这个文件，点击键盘 `i`键，代表insert，我们会看到终端左下角出现了`-- INSERT --`，这说明我们可以写入，我们把公共复制的fasta文本粘贴完后点击键盘 `esc`键，然后输入`:wq`，代表write和quit。这样子我们就写入好一个at.galt.pep了。
 我们需要的AtGALTs如下：
 ```bash
 >AT1G08280.1 | Symbols: GALT29A | glycosyltransferase 29A | chr1:2608408-2609604 FORWARD LENGTH=398
@@ -249,7 +249,7 @@ AT4G21060
 AT1G32930
 AT1G33430
 ```
-我们可以在[Sequence Bulk Download](https://v2.arabidopsis.org/tools/bulk/sequences/index.jsp)里下载，一样会自动跳转到一个网页，复制全部序列，然后使用vim写入新文件中。
+我们可以在[Sequence Bulk Download](https://v2.arabidopsis.org/tools/bulk/sequences/index.jsp)里下载，一样会自动跳转到一个网页，复制全部序列，然后使用`vim`写入新文件中。
 
 <img width="1440" height="705" alt="Image" src="https://github.com/user-attachments/assets/3759b73c-3352-4e17-987d-935caec19ca4" />
 
@@ -277,17 +277,17 @@ mv Antonovka_hapolomeA.fa md.chr
 mv Antonovka_hapolomeA_pep.fa md.pep
 mv Antonovka_hapolomeA_CDS.fa md.cds
 ```
-- wget的w指网络，也就是一个可以通过链接下载文件的本地的一个指令。
-- *代表任意长度的任意字符串，所以gzip -d *.gz的意思是把尾巴是.gz的全部文件都解压。
-- mv 文件1 名称2 可以把文件1的名称改为名称2。
+- `wget`：w指网络，也就是一个可以通过链接下载文件的本地的一个指令。
+- `*`：代表任意长度的任意字符串，所以gzip -d *.gz的意思是把尾巴是.gz的全部文件都解压。
+- `mv 文件1 名称2`：可以把文件1的名称改为名称2。
 
 如果你想查看当前路径可以用`pwd`，如果想知道当前路径都有什么文件可以使用`ls`，或者更多变体比如`ls -l`、`ls -lah`。如果想看一个文件的内容可以使用`less md.gff3`，退出按`q`。
 于是乎我们拥有了鉴定基因家族蛋白的全部文件了。我们还差什么呢？
 
 # 我们还差软件
 我们还需要2个十分重要的软件：
-- blast
-- hmmer
+- `blast`
+- `hmmer`
 要想很方便的安装这些软件，我们有**本本分分安装法**与**一劳永逸法**。我们先看看一劳永逸法，因为绝大部分的软件都可以用这个方法，然后在看本本分分安装法，因为有些特殊的软件可能必须得自己安装。
 
 ## 一劳永逸之Anaconda
@@ -460,6 +460,7 @@ seqkit grep -f md.id md.pep -o md.galt.pep
 <img width="1229" height="659" alt="截屏2026-03-03 上午2 36 06" src="https://github.com/user-attachments/assets/5b0dce1e-d234-4f37-99e8-c4c0d337b23c" />
 
 我们注意到Galactosyl_T肯定是我们要的结构域，但PLN03193是什么？看起来很重要因为每一个蛋白质都有这个结构域。我们可以直接去NCBI里搜索，[结果在这](https://www.ncbi.nlm.nih.gov/Structure/cdd/cddsrv.cgi?uid=178735)：
+
 非常让人舒心，描述为“beta-1,3-galactosyltransferase; Provisional”，来自文章 Identification of a novel group of putative Arabidopsis thaliana beta-(1,3)-galactosyltransferases.Plant Mol Biol 2008 Sep ; 68(1-2):43-59
 
 **自此我们可以宣布我们找到了全部可能的苹果GALT基因家族蛋白。**
