@@ -680,7 +680,7 @@ for file in *.all.pep; do
     echo ">>> Processing species: $prefix ..."
 
     # 1. HMM search (Using the downloaded .hmm file directly)
-    hmmsearch --tblout ${prefix}.hmm.res ${HMM_MODEL}.hmm ${prefix}.all.pep
+    hmmsearch --tblout ${prefix}.hmm.res ${HMM_MODEL}.hmm ${prefix}.all.pep > /dev/null
     
     # 2. Extract HMM IDs (excluding comment lines starting with '#')
     awk '{print $1}' ${prefix}.hmm.res | grep -v '#' > ${prefix}.hmm.id
