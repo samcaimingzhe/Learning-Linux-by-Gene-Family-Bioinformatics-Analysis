@@ -82,8 +82,7 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 - COTTONGEN：棉花 https://www.cottongen.org/
 - CGD：菊花 https://cgd.njau.edu.cn
 - CuGenDBv2：葫芦科 http://cucurbitgenomics.org/v2/
-
-BRAD：十字花科 http://brassicadb.cn/#/
+- BRAD：十字花科 http://brassicadb.cn/#/
 
 特别特别特殊的物种，可以在论文里查看是从哪获取的，可以到NCBI到数据库里再找找看。同时请注意并非所有的基因组都来自公共数据库，他们可能来自一些实验室内部的测序数据。
 
