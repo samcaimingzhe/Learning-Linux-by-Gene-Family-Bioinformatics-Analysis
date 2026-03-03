@@ -264,7 +264,7 @@ AT1G33430
 
 于是我们现在拥有了AtGALT蛋白质文件与PF01762的HMM Profile文件。
 
-# 下载苹果（*Malus Domestica*）基因组文件
+## 下载苹果（*Malus Domestica*）基因组文件
 我们可以在[Ensembl Plants](https://plants.ensembl.org/info/data/ftp/index.html)里搜索Malus过滤出仅有的一个苹果基因组。这里我们需要DNA fasta、Protein fasta和Gene Sets的gff3。单击以后会进入一个页面，染色体选择toplevel，意思是全部染色体都在一个文件里，他们还会提供单个染色体的文件。
 
 <img width="1198" height="251" alt="Image" src="https://github.com/user-attachments/assets/777e5fed-3589-4f24-866f-62947d7e2641" />
@@ -293,13 +293,13 @@ mv Antonovka_hapolomeA_CDS.fa md.cds
 如果你想查看当前路径可以用`pwd`，如果想知道当前路径都有什么文件可以使用`ls`，或者更多变体比如`ls -l`、`ls -lah`。如果想看一个文件的内容可以使用`less md.gff3`，退出按`q`。
 于是乎我们拥有了鉴定基因家族蛋白的全部文件了。我们还差什么呢？
 
-# 我们还差软件
+## 我们还差软件
 我们还需要2个十分重要的软件：
 - `blast`
 - `hmmer`
 要想很方便的安装这些软件，我们有**本本分分安装法**与**一劳永逸法**。我们先看看一劳永逸法，因为绝大部分的软件都可以用这个方法，然后在看本本分分安装法，因为有些特殊的软件可能必须得自己安装。
 
-## 一劳永逸之Anaconda
+### 一劳永逸之Anaconda
 我们要下载一个叫做anaconda的东西，你可以把它理解为很多软件都能通过它安装。等我们安装好我们就可以通过`conda install`来安装我们需要的分析包。如果你学过python应该对`pip install`不陌生，它们都是用来安装包的，而且conda可以用来安装python。
 你可以选择进入[anaconda](https://repo.anaconda.com/archive/)的下载网址，这里有非常非常多可以选择的。我们是为了安装在终端，所以选择后缀为.sh的。里面有MacOSX、Windows和Linux三种系统可以选择。
 以MacOS为例，我们下载并执行：
@@ -365,8 +365,8 @@ conda install -c bioconda hmmer
 我们就安装好了！更多功能可详见`conda -h`或者`conda --help`。
 接下来我们来看看本本分分安装法是怎么回事。
  
-## 本本分分之什么软件都是这个法
-### BLAST+
+### 本本分分之什么软件都是这个法
+#### BLAST+
 进入[blast+](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)下载页面：
 ```bash
 wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
@@ -397,7 +397,7 @@ export PATH="/Users/YourUserName/Desktop/GeneFamilyAnalysis/ncbi-blast-2.17.0+/b
 ```bash
 blastp -h
 ```
-### Hmmer
+#### Hmmer
 进入[Hmmer](http://hmmer.org/download.html)下载页面，具体如何安装看[Documentation](http://hmmer.org/documentation.html)：
 ```bash
 wget http://eddylab.org/software/hmmer/hmmer-3.4.tar.gz
@@ -486,8 +486,9 @@ bash download_and_process_data.sh
 bash extract_family_proteins.sh
 ```
 你们可以自己`less 文件名`观察观察里面写了些什么，如果有更多时间的话。
+建议先运行一下哦，把这个跑通。因为我们下一个分析需要用到生成的`Merged.galt.simplified.pep`。
 
-## 一些迷思
+# 一些迷思
 你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。
 
 到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
@@ -499,3 +500,71 @@ bash extract_family_proteins.sh
 等我们做到后面就会发现，可能我们发现了20个甚至200个有潜在价值的蛋白质，一做转录组分析看表达量就会大发现。根本没啥表达量，我们就会着重关注表达量高的家族成员。会进一步筛选出更加有分析价值的成员。最后我们很可能只会锁定个位数个成员做qPCR。
 
 所以我们做的家族分析本质上就是一套流程化的分析法。在此仅产生一些小小的思考足矣。
+
+# 构建系统发育进化树
+我们需要另一个软件是`clustalw`，这个软件可以进行多序列比对与构建系统发育进化树。
+## 多序列比对
+```bash
+conda install -c bioconda clustalw
+mkdir phylogeny
+```
+`clustalw`的玩法和刚刚的软件不一样，不是一行一行运行的。我们只用输入`clustalw`然后回车。
+```bash
+ **************************************************************
+ ******** CLUSTAL 2.1 Multiple Sequence Alignments  ********
+ **************************************************************
+
+     1. Sequence Input From Disc
+     2. Multiple Alignments
+     3. Profile / Structure Alignments
+     4. Phylogenetic trees
+
+     S. Execute a system command
+     H. HELP
+     X. EXIT (leave program)
+
+Your choice: 
+```
+我们先使用`1.`，然后输入`result/Merged.galt.simplified.pep`。回车后会返回原来的界面，再输入`2.`会进入这个界面再输入`1.`：
+```bash
+****** MULTIPLE ALIGNMENT MENU ******
+
+    1.  Do complete multiple alignment now Slow/Accurate
+    2.  Produce guide tree file only
+    3.  Do alignment using old guide tree file
+
+    4.  Toggle Slow/Fast pairwise alignments = SLOW
+
+    5.  Pairwise alignment parameters
+    6.  Multiple alignment parameters
+
+    7.  Reset gaps before alignment? = OFF
+    8.  Toggle screen display          = ON
+    9.  Output format options
+    I. Iteration = NONE
+
+    S.  Execute a system command
+    H.  HELP
+    or press [RETURN] to go back to main menu
+
+Your choice: 
+```
+然后继续回车就好了，会有默认命名的文件生成。但是我们也可以修改文件名，比如从`result/Merged.galt.simplified.dnd`改为`phylogeny/Merged.galt.simplified.dnd`。
+```bash
+Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.aln]: phylogeny/Merged.galt.simplified.aln
+Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.dnd]: phylogeny/Merged.galt.simplified.dnd
+```
+## 系统发育进化树
+跑完之后就多次输入`x`退出到最初的界面，输入`4.`，然后输入`5.`：
+```bash
+Enter name for bootstrap output file   [result/Merged.galt.simplified.phb]: phylogeny/Merged.galt.simplified.phb
+Enter seed no. for random number generator  (1..1000)    [111]: 79
+Enter number of bootstrap trials  (1..10000)    [1000]: 1000
+```
+可以选择你喜欢的数字作为随机种子，或者直接回车（默认111）。Bootstrap一般使用1000即可。
+自此我们获得了进化树文件`Merged.galt.simplified.phb`。我们可以暂时离开终端，我们需要去画图了。
+我们需要来到[ITOL（Interactive Tree Of Life）](https://itol.embl.de/)。
+整个操作流程详见[Bilibili：都2024年了，如何快速入门基因家族分析？| ITOL美化系统进化树](https://www.bilibili.com/video/BV1va2VYHEre/?spm_id_from=333.1387.homepage.video_card.click)。
+这是我2024年发布的，当时使用的树和我们现在做出来的不一样。所以大家可以自己尝试着去给树分亚家族。
+
+
