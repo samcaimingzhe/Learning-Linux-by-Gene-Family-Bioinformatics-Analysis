@@ -629,6 +629,12 @@ GSLPTSHPSFSPQRHLELSSNWQAPSLPDEQVDMFIGILSAGNHFAERMAVRRSWMQHKLVKSSKVVARFFVALHSRKEV
 DSYDLVVLKTVAICEYGAHQLAAKFIMKCDDDTFVQVDAVLSEAKKTPTDRSLYIGNINYYHKPLRQGKWSVTYEEWPEEDYPPYANGPGYILSNDISRF
 IVKEFEKHKLRMFKMEDVSVGMWVEQFNNGTKPVDYIHSLRFCQFGCIENYLTAHYQSPRQMICLWDKLVLTGKPQCCNMR*
 ```
+因为我们换了一个路径，这里还没有Profile HMM，这里给大家提供一个cmd版本，运行一下即可：
+```bash
+wget "https://www.ebi.ac.uk/interpro/wwwapi//entry/pfam/PF01762?annotation=hmm"
+mv  PF01762?annotation=hmm PF01762.hmm.gz
+gzip -d PF01762.hmm.gz
+```
 
 我们就可以开始写最后一份**重量级**脚本`vim extract_family_proteins.sh`：
 ```bash
@@ -721,7 +727,7 @@ echo ">>> Merging all final sequences..."
 cat *."${GENE_NAME}".pep > Merged.unsimplified."${GENE_NAME}".pep
 seqkit replace -p "\s.+" -r "" Merged.unsimplified."${GENE_NAME}".pep > Merged.simplified."${GENE_NAME}".pep
 
-echo "✅ Success! All sequences have been merged into Merged.${GENE_NAME}.pep"
+echo "✅ Success! All sequences have been merged into Merged.simplified.${GENE_NAME}.pep"
 ```
 最后我们就可以轻轻松松的：
 ```bash
