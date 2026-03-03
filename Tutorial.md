@@ -229,7 +229,6 @@ KCEKWARDDSITSKEEESSKAASWWLSRLIGRSKKVTVEWPFPFTVDKLFVLTLSAGLEGYHVSVDGKHVTSFPYRTGFT
 GSLPTSHPSFSPQRHLELSSNWQAPSLPDEQVDMFIGILSAGNHFAERMAVRRSWMQHKLVKSSKVVARFFVALHSRKEVNVELKKEAEFFGDIVIVPYM
 DSYDLVVLKTVAICEYGAHQLAAKFIMKCDDDTFVQVDAVLSEAKKTPTDRSLYIGNINYYHKPLRQGKWSVTYEEWPEEDYPPYANGPGYILSNDISRF
 IVKEFEKHKLRMFKMEDVSVGMWVEQFNNGTKPVDYIHSLRFCQFGCIENYLTAHYQSPRQMICLWDKLVLTGKPQCCNMR*
-
 ```
 ## 没有校园网
 人不在学校，没有校园网VPN，也不想在TAIR注册怎么办？我们仍然有办法。点击Download All我们会得到一个tsv。可以用Excel打开，我们将发现第二列就是我们需要的基因ID。
@@ -260,17 +259,20 @@ AT1G33430
 
 或者在[GDR](https://www.rosaceae.org/organism/24348?pane=bio_data_1_rsc_genomes)中选取一个合适的基因组也是不错的。如果文件名中带有haploid或diploid，选择单倍型haploid。GDR中的基因组多的眼花缭乱，我们任意选择一个其实不会对结果造成太大影响。
 
-我们这次选择Ensembl Plants的苹果基因组文件。
+我们这次选择 GDR 的苹果基因组文件(Ensembl Plants的苹果基因组到后续分析会有些问题，所以我们不用，我为什么知道是因为我曾经用过感觉需要调整的地方很多)。
+基因组版本为 (Malus x domestica Antonovka 172670-B Whole Genome v1.0 Assembly & Annotation)[https://www.rosaceae.org/Analysis/17808414]
 ```bash
-wget https://ftp.ebi.ac.uk/ensemblgenomes/pub/release-62/plants/fasta/malus_domestica_golden/dna/Malus_domestica_golden.ASM211411v1.dna.toplevel.fa.gz
-wget https://ftp.ebi.ac.uk/ensemblgenomes/pub/release-62/plants/fasta/malus_domestica_golden/pep/Malus_domestica_golden.ASM211411v1.pep.all.fa.gz
-wget https://ftp.ebi.ac.uk/ensemblgenomes/pub/release-62/plants/gff3/malus_domestica_golden/Malus_domestica_golden.ASM211411v1.62.chr.gff3.gz
+wget https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/assembly/Antonovka_hapolomeA.fa.gz
+wget https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/genes/Antonovka_hapolomeA_pep.fa.gz
+wget https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/genes/Antonovka_hapolomeA.gff3.gz
+wget https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Antonovka_172670-B_v1.0/genes/Antonovka_hapolomeA_CDS.fa.gz
 
 gzip -d *.gz
 
-mv Malus_domestica_golden.ASM211411v1.62.chr.gff3 md.gff3
-mv Malus_domestica_golden.ASM211411v1.dna.toplevel.fa md.chr
-mv Malus_domestica_golden.ASM211411v1.pep.all.fa md.pep
+mv Antonovka_hapolomeA.gff3 md.gff3
+mv Antonovka_hapolomeA.fa md.chr
+mv Antonovka_hapolomeA_pep.fa md.pep
+mv Antonovka_hapolomeA_CDS.fa md.cds
 ```
 - wget的w指网络，也就是一个可以通过链接下载文件的本地的一个指令。
 - *代表任意长度的任意字符串，所以gzip -d *.gz的意思是把尾巴是.gz的全部文件都解压。
@@ -352,6 +354,7 @@ conda install -c bioconda hmmer
 接下来我们来看看本本分分安装法是怎么回事。
  
 ## 本本分分之什么软件都是这个法
+### BLAST+
 进入[blast+](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/)下载页面：
 ```bash
 wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
@@ -382,8 +385,58 @@ export PATH="/Users/YourUserName/Desktop/GeneFamilyAnalysis/ncbi-blast-2.17.0+/b
 ```bash
 blastp -h
 ```
+### Hmmer
+进入[Hmmer](http://hmmer.org/download.html)下载页面，具体如何安装看[Documentation](http://hmmer.org/documentation.html)：
+```bash
+wget http://eddylab.org/software/hmmer/hmmer-3.4.tar.gz
+tar -zxvf hmmer-3.4.tar.gz
+cd hmmer-3.4
+./configure
+make
+make check
+sudo make install
+```
+我想大家已经能感受到本本分分法的麻烦了。确实是麻烦，之后的包我们都用`conda install -c bioconda 软件名`安装。
 
+## 开始鉴定基因家族蛋白
+我们首先使用`hmmer`，因为这个最快，先检查是否可以使用`hmmsearch -h`。关于为什么是输入`hmmer`我也不清楚，不同软件的用法都有所差异，这个软件也不需要我们`source ~/.zshrc`。
+```bash
+hmmsearch --tblout hmm.res PF01762.hmm md.pep
+less hmm.res
+```
+我们就能看到这个简简单单的表格，我们只需要第一列：
+```bash
+awk '{print $1}' hmm.res | grep -v '#' > hmm.id
+```
+- `awk`：一个按照列处理文本的工具
+- `$1`：表示第一列
+- `|`：表示下一步，也称作管道符，如果你接触过R语言，应该也见过`%>%`和`|>`
+- `grep`：：一个按照行处理文本的工具，一行一行匹配信息
+- `-v '#'`：不匹配符号`#`，也就是过滤掉注释行。如果是想匹配就去掉`-v`
+- `>`：表示导出为，如果没有就会直接打印出来
 
+然后我们使用`blastp`：
+```bash
+makeblastdb -in md.pep -input_type fasta -parse_seqids -dbtype prot -out md
+blastp -task blastp -db md -query ath.galt.pep -evalue 10 -outfmt 6 -out blast.res
+awk '{print $2}' blast.res > blast.id
+```
+- `-query`：表示输入文件，query这个单词会经常出现，可以理解为“灰姑娘的水晶鞋”，在此也是我们的拟南芥GALT蛋白序列
+- `-db md`：表示选择数据库，之前`makeblastdb`的时候`-out md`，所以蛋白质数据库的前缀都是`md`
+- `-evalue 10`：表示1e-10，是一个很常用的e-value， e-value越小，筛选条件越严格，得到的序列数量就越少
+- `-outfmt 6`：按照第6种格式表格输出，还有非常多不同的格式
 
+可能会有同学问到，为什么已经是`blastp`了，还需要注明`-task blastp`，这不是多此一举吗？有这样的疑问是很好的，我也思考过为什么。答案就在`blastp -help`里，我们会看到：
+```bash
+*** General search options
+ -task <String, Permissible values: 'blastp' 'blastp-fast' 'blastp-short' >
+   Task to execute
+   Default = `blastp'
+```
+如果我们不使用其他变体，那默认就是`-task blastp`，其实也可以不注明。这里是希望大家哪怕在复制粘贴的时候也要保持好奇心，感到奇怪就提出问题并寻找答案。所以以上的一些部分其实可以省略，有默认数值。
 
+自此我们拥有了`hmm.id`和`blast.id`，我们取二者交集就是我们的基因家族蛋白候选成员了，注意这里我们的描述是**候选成员**。
+```bash
+
+```
 
