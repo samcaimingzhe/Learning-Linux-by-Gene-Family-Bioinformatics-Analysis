@@ -564,7 +564,27 @@ Enter number of bootstrap trials  (1..10000)    [1000]: 1000
 可以选择你喜欢的数字作为随机种子，或者直接回车（默认111）。Bootstrap一般使用1000即可。其默认使用的是NJ法（Neighbor-Joining）建树，这个信息在写论文的时候需要提及。
 自此我们获得了进化树文件`Merged.galt.simplified.phb`。我们可以暂时离开终端，我们需要去画图了。
 我们需要来到[ITOL（Interactive Tree Of Life）](https://itol.embl.de/)。
+
 整个操作流程详见[Bilibili：都2024年了，如何快速入门基因家族分析？| ITOL美化系统进化树](https://www.bilibili.com/video/BV1va2VYHEre/?spm_id_from=333.1387.homepage.video_card.click)。
 这是我2024年发布的，当时使用的树和我们现在做出来的不一样。所以大家可以自己尝试着去给树分亚家族。
 
+<img width="4862" height="4742" alt="orMz5-6sutw2-o-CnvCvLg" src="https://github.com/user-attachments/assets/b3cceea8-e044-4552-a0fb-f21300a97a14" />
+
+我们先简单观察一下树形，红色箭头指向的是3个影响树形分组的序列。由于ANT开头的是苹果GALT，我们不能去除这一条，我们可以在Soly和Cs两条中选择一条来去除，可以优先去除`Csi09G015180.1`。以及我们观察这个序列右边出现的`Csi09G023800.1,.2,.3,.4`这些都是同一个基因的剪切本，我们一般只取最长的`Csi09G023800.1`。这个在介绍gff3文件的时候有提及。
+
+所以我们需要对`Merged.galt.simplified.pep`进行序列ID的提取。这一部分可能需要手动去除，因为不是所有序列的命名格式都是`.1.2.3.4`这样子。
+```bash
+cp result/Merged.galt.simplified.pep phylogeny
+cd phylogeny
+grep '>' Merged.galt.simplified.pep | sed 's/>//' > Merged.galt.id
+cat Merged.galt.id
+```
+- `cp`：表示复制
+- `sed 's/>//'`：表示把本行的`>`字符替换为空
+- `cat`：可以打印出文件全部内容
+
+我们会发现这个多剪切本的情况只出现在Cs中，因为序列不多我们可以自己手动删除。这里我贴上删除好的，大家可以自行`vim`一个新的`Merged.galt.id.1`，可以用Excel打开，也可以先`cp Merged.galt.id Merged.galt.id.1`后再删除里面个别剪切本，每一次修改文件都`cp`一份备份，这是一个需要养成的好习惯：
+```bash
+
+```
 
