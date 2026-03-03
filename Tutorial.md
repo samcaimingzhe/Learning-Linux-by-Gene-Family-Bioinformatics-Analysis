@@ -483,53 +483,6 @@ cd ..
 mkdir play_script
 cd play_script
 ```
-
-首先我提供一份下载链接，我们先`vim genome.url`：
-
-我们可以先写一个下载while循环来试试看`vim file_download.sh`：
-```bash
-while read -r url; do
-    echo "Downloading: $url"
-    wget -c "$url"
-done < file_url.txt
-
-gzip -d *.gz
-unzip \*.zip
-
-mv pbr.v1.1.pep pb.all.pep
-mv pbr.v1.1.chr.fa pb.chr
-mv pbr.v1.1.chr.gff3 pb.gff3
-mv Arabidopsis_thaliana.TAIR10.dna.toplevel.fa ath.chr
-mv Arabidopsis_thaliana.TAIR10.62.gff3 ath.gff3
-mv PN40024_5.1_on_T2T_ref_with_names.gff3 vv.gff3
-mv 5.1_on_T2T_ref_main_proteins.fasta vv.all.pep
-mv T2T_ref.fasta vv.chr
-mv Antonovka_hapolomeA.fa md.chr
-mv Antonovka_hapolomeA.gff3 md.gff3
-mv Antonovka_hapolomeA_pep.fa md.all.pep
-mv Fragaria_vesca_v6_genome.fasta fv.chr
-mv Fragaria_vesca_v6_genome.gff fv.gff3
-mv Fragaria_vesca_v6_proteins.fasta fv.all.pep
-mv Lovell_2D_v3.0.scaffold.fa pp.chr
-mv Lovell_2D_v3.0.genes.gff3 pp.gff3
-mv Lovell_2D_v3.0.proteins.fa pp.all.pep
-mv S_lycopersicum_chromosomes.4.00.fa sl.chr
-mv ITAG4.0_gene_models.gff sl.gff3
-mv ITAG4.0_proteins.fasta sl.all.pep
-mv Neixiu_assembly-renamed.fa cs.chr
-mv Neixiu_v1-proteins.fasta cs.all.pep
-mv Chr_genome_all_transcripts_final_gene.gff3 cs.gff3
-
-mkdir proteins
-mkdir annotations
-mkdir chromosomes
-
-mv *.pep /proteins
-mv *.gff3 /annotations
-mv *.chr /chromosomes
-mkdir result
-mkdir databases
-```
 我们就可以开始写最后一份**重量级**脚本`vim extract_family_proteins.sh`：
 ```bash
 #!/bin/bash
@@ -614,6 +567,14 @@ bash extract_family_proteins.sh
 ```
 
 ## 一些迷思
-你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
+你问我有可能遗漏吗？是有可能的，但这种遗漏是技术的结构性问题。
+
+到此我们休息一下，不妨思考冷静下来思考一下，我们是如何证明AtGALT和MdGALT都是一个家族的蛋白质。我们是从蛋白质序列的相似性出发的。序列相似是功能相似的什么条件？高中数学的充分必要条件，是哪一种？
+
 **必要不充分条件**，功能相似的序列通常长得很像，但长得像的序列功能不一定一样。
-是否存在一些蛋白质变异的可能已经让我吗无法筛选出来，缺又默默行使着它们的生物学功能，也许吧，也许是存在的，虽然可能性很小，我们学高等数学的时候就知道“概率为0的事件也有可能发生”。这世界千千万万，总有我们抓不住的东西。生物信息学只是一套分析法，其目的本身就是为生物学带来计算机给人类的一大优势——效率。等我们做到后面就会发现，可能我们发现了20个甚至200个有潜在价值的蛋白质，一做转录组分析看表达量就会大发现。根本没啥表达量，我们就会着重关注表达量高的家族成员。会进一步筛选出更加有分析价值的成员。最后我们很可能只会锁定个位数个成员做qPCR。所以我们做的家族分析本质上就是一套流程化的分析法。在此仅产生一些小小的思考足矣。
+
+是否存在一些蛋白质变异的可能已经让我吗无法筛选出来，缺又默默行使着它们的生物学功能，也许吧，也许是存在的，虽然可能性很小，我们学高等数学的时候就知道“概率为0的事件也有可能发生”。这世界千千万万，总有我们抓不住的东西。生物信息学只是一套分析法，其目的本身就是为生物学带来计算机给人类的一大优势——效率。
+
+等我们做到后面就会发现，可能我们发现了20个甚至200个有潜在价值的蛋白质，一做转录组分析看表达量就会大发现。根本没啥表达量，我们就会着重关注表达量高的家族成员。会进一步筛选出更加有分析价值的成员。最后我们很可能只会锁定个位数个成员做qPCR。
+
+所以我们做的家族分析本质上就是一套流程化的分析法。在此仅产生一些小小的思考足矣。
