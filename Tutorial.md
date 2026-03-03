@@ -522,28 +522,28 @@ unzip \*.zip
 ```
 之后用`ls -lah`检查一下文件下载情况，就可以进行`mv`重命名了为统一结构的名称，方便我们后续写脚本：
 ```bash
-mv pbr.v1.1.pep pb.pep
+mv pbr.v1.1.pep pb.all.pep
 mv pbr.v1.1.chr.fa pb.chr
 mv pbr.v1.1.chr.gff3 pb.gff3
 mv Arabidopsis_thaliana.TAIR10.dna.toplevel.fa ath.chr
 mv Arabidopsis_thaliana.TAIR10.62.gff3 ath.gff3
 mv PN40024_5.1_on_T2T_ref_with_names.gff3 vv.gff3
-mv 5.1_on_T2T_ref_main_proteins.fasta vv.pep
+mv 5.1_on_T2T_ref_main_proteins.fasta vv.all.pep
 mv T2T_ref.fasta vv.chr
 mv Antonovka_hapolomeA.fa md.chr
 mv Antonovka_hapolomeA.gff3 md.gff3
-mv Antonovka_hapolomeA_pep.fa md.pep
+mv Antonovka_hapolomeA_pep.fa md.all.pep
 mv Fragaria_vesca_v6_genome.fasta fv.chr
 mv Fragaria_vesca_v6_genome.gff fv.gff3
-mv Fragaria_vesca_v6_proteins.fasta fv.pep
+mv Fragaria_vesca_v6_proteins.fasta fv.all.pep
 mv Lovell_2D_v3.0.scaffold.fa pp.chr
 mv Lovell_2D_v3.0.genes.gff3 pp.gff3
-mv Lovell_2D_v3.0.proteins.fa pp.pep
+mv Lovell_2D_v3.0.proteins.fa pp.all.pep
 mv S_lycopersicum_chromosomes.4.00.fa sl.chr
 mv ITAG4.0_gene_models.gff sl.gff3
-mv ITAG4.0_proteins.fasta sl.pep
+mv ITAG4.0_proteins.fasta sl.all.pep
 mv Neixiu_assembly-renamed.fa cs.chr
-mv Neixiu_v1-proteins.fasta cs.pep
+mv Neixiu_v1-proteins.fasta cs.all.pep
 mv Chr_genome_all_transcripts_final_gene.gff3 cs.gff3
 ```
 最后记得`vim ath.galt.pep`，不过原来的信息台上面了，我再贴一遍:
@@ -639,7 +639,6 @@ gzip -d PF01762.hmm.gz
 我们就可以开始写最后一份**重量级**脚本`vim extract_family_proteins.sh`：
 ```bash
 #!/bin/bash
-
 # ==========================================
 # Parameter Configuration Area
 # ==========================================
@@ -654,53 +653,40 @@ EVALUE="10"                    # E-value threshold for BLAST
 # ==========================================
 echo ">>> Checking required files and dependencies..."
 
-# Check if the BLAST query file exists
-if [ ! -f "$BLAST_QUERY" ]; then
-    echo "Error: BLAST query file '$BLAST_QUERY' not found!"
-    exit 1
-fi
+CHECK_FAILED=0
 
-# Check if there are any .pep files in the current directory
-pep_count=$(ls *.pep 2>/dev/null | wc -l)
-if [ "$pep_count" -eq 0 ]; then
-    echo "Error: No .pep files found in the current directory!"
-    exit 1
-fi
+[ -s "${BLAST_QUERY}" ] && echo " [OK] ${BLAST_QUERY} found." || { echo " [ERROR] ${BLAST_QUERY} not found or empty!"; CHECK_FAILED=1; }
+[ -s "${HMM_MODEL}.hmm" ] && echo " [OK] ${HMM_MODEL}.hmm found." || { echo " [ERROR] ${HMM_MODEL}.hmm not found or empty!"; CHECK_FAILED=1; }
 
-# Optional but recommended: Check if required software is installed
 for cmd in hmmsearch makeblastdb blastp awk grep seqkit; do
-    if ! command -v $cmd &> /dev/null; then
-        echo "Error: Required software '$cmd' is not installed or not in PATH!"
-        exit 1
-    fi
+    command -v ${cmd} > /dev/null 2>&1 && echo " [OK] Software: ${cmd}" || { echo " [ERROR] Software: '${cmd}' is missing!"; CHECK_FAILED=1; }
 done
-
-echo "All required local files and software are ready."
 echo "=========================================="
 
-
-# Check if the hmm is here
-if [ ! -s "${HMM_MODEL}.hmm" ]; then
-    echo "Error: Failed to find ${HMM_MODEL}.hmm!"
+if [ "$CHECK_FAILED" -eq 1 ]; then
+    echo "Pre-flight check failed! Please fix the errors listed above and run again."
     exit 1
+else
+    echo "All checks passed! Starting main pipeline..."
 fi
+echo "=========================================="
 
 # ==========================================
-# 3. Main Pipeline Loop
+# 2. Main Pipeline Loop
 # ==========================================
-for file in *.pep; do
+for file in *.all.pep; do
     # Extract the filename prefix (e.g., get "pb" from "pb.pep")
-    prefix=${file%.pep}
+    prefix=${file%.all.pep}
     echo ">>> Processing species: $prefix ..."
 
     # 1. HMM search (Using the downloaded .hmm file directly)
-    hmmsearch --tblout ${prefix}.hmm.res ${HMM_MODEL}.hmm ${prefix}.pep
+    hmmsearch --tblout ${prefix}.hmm.res ${HMM_MODEL}.hmm ${prefix}.all.pep
     
     # 2. Extract HMM IDs (excluding comment lines starting with '#')
     awk '{print $1}' ${prefix}.hmm.res | grep -v '#' > ${prefix}.hmm.id
     
     # 3. Build BLAST database (Output to log to keep terminal clean)
-    makeblastdb -in ${prefix}.pep -input_type fasta -parse_seqids -dbtype prot -out ${prefix}_db -logfile /dev/null
+    makeblastdb -in ${prefix}.all.pep -input_type fasta -parse_seqids -dbtype prot -out ${prefix}_db -logfile /dev/null
     
     # 4. BLASTP alignment
     blastp -task blastp -db ${prefix}_db -query "${BLAST_QUERY}" -evalue "${EVALUE}" -outfmt 6 -out ${prefix}.blast.res
@@ -713,21 +699,22 @@ for file in *.pep; do
     
     # 7. Extract the final protein sequences
     # Note: Added the species prefix to the sequence ID to avoid duplicates when merging!
-    seqkit grep -f ${prefix}.final.id ${prefix}.pep  -o ${prefix}.${GENE_NAME}.pep
+    seqkit grep -f ${prefix}.final.id ${prefix}.all.pep  -o ${prefix}.${GENE_NAME}.pep
     
     echo "$prefix Done"
     echo "------------------------------------"
 done
 
 # ==========================================
-# 4. Merge All Results
+# 3. Merge All Results
 # ==========================================
 echo ">>> Merging all final sequences..."
-cat *."${GENE_NAME}".pep > Merged.unsimplified."${GENE_NAME}".pep
-seqkit replace -p "\s.+" -r "" Merged.unsimplified."${GENE_NAME}".pep > Merged.simplified."${GENE_NAME}".pep
+cat *."${GENE_NAME}".pep > Merged."${GENE_NAME}".unsimplified.pep
+seqkit replace -p "\s.+" -r "" Merged."${GENE_NAME}".unsimplified.pep > Merged."${GENE_NAME}".simplified.pep
 
-echo "✅ Success! All sequences have been merged into Merged.simplified.${GENE_NAME}.pep"
+echo "Success! All sequences have been merged into Merged.${GENE_NAME}.simplified.pep"
 ```
+
 最后我们就可以轻轻松松的：
 ```bash
 bash extract_family_proteins.sh
