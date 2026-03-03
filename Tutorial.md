@@ -561,7 +561,7 @@ Enter name for bootstrap output file   [result/Merged.galt.simplified.phb]: phyl
 Enter seed no. for random number generator  (1..1000)    [111]: 79
 Enter number of bootstrap trials  (1..10000)    [1000]: 1000
 ```
-可以选择你喜欢的数字作为随机种子，或者直接回车（默认111）。Bootstrap一般使用1000即可。
+可以选择你喜欢的数字作为随机种子，或者直接回车（默认111）。Bootstrap一般使用1000即可。其默认使用的是NJ法（Neighbor-Joining）建树，这个信息在写论文的时候需要提及。
 自此我们获得了进化树文件`Merged.galt.simplified.phb`。我们可以暂时离开终端，我们需要去画图了。
 我们需要来到[ITOL（Interactive Tree Of Life）](https://itol.embl.de/)。
 整个操作流程详见[Bilibili：都2024年了，如何快速入门基因家族分析？| ITOL美化系统进化树](https://www.bilibili.com/video/BV1va2VYHEre/?spm_id_from=333.1387.homepage.video_card.click)。
