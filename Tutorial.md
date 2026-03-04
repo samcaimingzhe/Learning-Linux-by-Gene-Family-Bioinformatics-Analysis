@@ -483,7 +483,7 @@ seqkit grep -f md.id md.pep -o md.galt.pep
 那我们就定8个物种来做做吧～比如：拟南芥、苹果、梨、橙子、葡萄、草莓、桃子、番茄。
 所有需要的文件都放在了`identification.zip`中，具体运行代码如下：
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/identificaition.zip
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/identification.zip
 unzip identificaition.zip
 cd identification
 bash download_and_process_data.sh
