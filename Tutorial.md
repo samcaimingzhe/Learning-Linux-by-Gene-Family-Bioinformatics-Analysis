@@ -685,6 +685,37 @@ clustalw
 我们需要安装R语言与Rstudio两个东西，Rstudio像是容器，R语言是灵魂。R语言本身可以单独使用，但是在Rstudio的加持下会使我们的编程变得赏心悦目。
 我们采用R语言清华镜像源[MacOSX](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/macosx/)、[Windows](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/windows/)、[Linux](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/linux/)。选择合适你的下载即可。然后来[下载Rstudio](https://posit.co/downloads/)。先运行R语言的安装包，再运行Rstudio的安装包。最后我们使用的是Rstudio。
 
+以下是我们需要使用到的R脚本与在终端的运行方式：
+```bash
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/cd_motif_gene_1.0.R
+Rscript cd_motif_gene_1.0.R
+```
+我们最好的形式是在Rstudio中运行：
+
+<img width="1440" height="900" alt="截屏2026-03-04 下午11 02 09" src="https://github.com/user-attachments/assets/db5f90c2-a6e1-401c-9341-863df14ee084" />
+
+这里方便我们一行一行处理代码，查看变量与出图。完善好的R脚本就可以直接在终端运行了。
+
+<img width="1440" height="900" alt="截屏2026-03-04 下午11 02 47" src="https://github.com/user-attachments/assets/a82e0c72-aeb8-4aed-8491-b1dd9a8e4343" />
+
+注意到脚本的第一部分写了一个配置，可以在此修改：
+- WIDTH_OF_PLOT：图片的宽度
+- HEIGHT_OF_PLOT：图片的高度
+- DPI_OF_PNG：png图片的dpi值
+- PROPORTION_OF_EACH：整张图由树、motif分布、保守结构域分布、基因结构4个部分组成，可以决定每一个小部分的宽度占比
+- FILENAME_PREFIX：最后文件名的前缀
+- MOTIF_FILTER：可以选择希望展示的motif，一般不需要舍弃任何motif
+- CD_FILTER：可以选择希望展示的保守结构域色块，一般会有不需要的结构域，就可以舍弃
+
+关于结构域的选择，根据半乳糖基转移酶的相关论文，Galactosyl_T是最主要的结构域，部分会发现有DUF4094，但是这个结构域的研究不多，目前被认为是一个无功能但保守的结构域。此外PLN03193和PLN03133在NCBI CDD数据库都注释为beta-1,3半乳糖基转移酶。所以我们在cd_motif_gene_2.0.R中做出了筛选并出图。
+```bash
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/cd_motif_gene_2.0.R
+Rscript cd_motif_gene_2.0.R
+```
+运行`2.0`会覆盖`1.0`的结果，所以请先运行`1.0`查看一下图片，再运行`2.0`。
+
+
+
 
 
 
