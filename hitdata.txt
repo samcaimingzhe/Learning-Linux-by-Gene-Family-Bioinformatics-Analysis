@@ -1,149 +1,49 @@
 #Batch CD-search tool	NIH/NLM/NCBI
-#cdsid	QM3-qcdsearch-3C3F6D3E83E3B1FA-BE0D2BABA7B9DB8
+#cdsid	QM3-qcdsearch-233DB0F1345034C9-13A47B6459A558B5
 #datatype	hitsConcise Results
 #status	0
-#Start time	2026-03-04T01:46:02	Run time	0:00:03:21
+#Start time	2026-03-04T01:51:55	Run time	0:00:00:08
 #status	success
 
 Query	Hit type	PSSM-ID	From	To	E-Value	Bitscore	Accession	Short name	Incomplete	Superfamily
-Q#1 - >CsGALT1	superfamily	178735	1	397	0	662.821	cl31980	PLN03193 superfamily	 - 	 - 
-Q#2 - >CsGALT2	superfamily	215596	149	688	4.26954e-133	406.108	cl27711	PLN03133 superfamily	 - 	 - 
-Q#3 - >CsGALT3	specific	178735	1	407	0	865.051	PLN03193	PLN03193	 - 	cl31980
-Q#4 - >CsGALT4	specific	461378	209	460	4.72194e-130	377.249	pfam04646	DUF604	 - 	cl47895
-Q#5 - >CsGALT5	superfamily	178735	14	401	0	584.625	cl31980	PLN03193 superfamily	 - 	 - 
-Q#6 - >CsGALT6	specific	178532	460	1024	0	1062.62	PLN02946	PLN02946	 - 	cl31958
-Q#6 - >CsGALT6	superfamily	178735	8	336	4.29604e-78	261.443	cl31980	PLN03193 superfamily	 - 	 - 
-Q#7 - >CsGALT7	superfamily	473923	1	78	1.5242e-18	77.3638	cl21608	Galactosyl_T superfamily	N	 - 
-Q#8 - >CsGALT8	superfamily	444905	417	575	8.72167e-73	235.749	cl00437	Zip superfamily	N	 - 
-Q#8 - >CsGALT8	superfamily	473923	119	314	2.74118e-57	190.613	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#9 - >CsGALT9	specific	178735	1	407	0	808.811	PLN03193	PLN03193	 - 	cl31980
-Q#10 - >CsGALT10	superfamily	473923	89	232	1.67683e-09	56.5631	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#11 - >CsGALT11	superfamily	178735	2	395	0	534.164	cl31980	PLN03193 superfamily	 - 	 - 
-Q#12 - >CsGALT12	superfamily	178735	26	389	0	566.136	cl31980	PLN03193 superfamily	 - 	 - 
-Q#13 - >CsGALT13	superfamily	178735	1	237	3.21269e-161	452.117	cl31980	PLN03193 superfamily	N	 - 
-Q#14 - >CsGALT14	superfamily	178735	91	339	1.14219e-54	184.403	cl31980	PLN03193 superfamily	N	 - 
-Q#15 - >CsGALT15	superfamily	215596	155	680	5.11002e-137	416.123	cl27711	PLN03133 superfamily	N	 - 
-Q#16 - >CsGALT16	specific	185697	405	678	1.01213e-117	353.068	cd09020	D-hex-6-P-epi_like	 - 	cl14648
-Q#16 - >CsGALT16	superfamily	178735	82	332	2.73335e-91	289.948	cl31980	PLN03193 superfamily	N	 - 
-Q#16 - >CsGALT16	specific	463847	17	95	0.000769017	39.2065	pfam13334	DUF4094	 - 	cl38400
-Q#17 - >CsGALT17	superfamily	178735	7	407	0	609.278	cl31980	PLN03193 superfamily	 - 	 - 
-Q#18 - >CsGALT18	superfamily	215596	1	635	0	1177.66	cl27711	PLN03133 superfamily	 - 	 - 
-Q#19 - >CsGALT19	superfamily	215596	136	666	1.09498e-116	362.966	cl27711	PLN03133 superfamily	 - 	 - 
-Q#20 - >CsGALT20	specific	215596	1	628	0	1273.96	PLN03133	PLN03133	 - 	cl27711
-Q#21 - >CsGALT21	superfamily	178735	80	330	2.05532e-90	277.236	cl31980	PLN03193 superfamily	N	 - 
-Q#22 - >FvGALT1	specific	461378	234	475	6.13601e-137	395.738	pfam04646	DUF604	 - 	cl47895
-Q#23 - >FvGALT2	superfamily	178735	81	418	0	512.593	cl31980	PLN03193 superfamily	 - 	 - 
-Q#23 - >FvGALT2	specific	463847	7	134	8.37559e-24	94.6753	pfam13334	DUF4094	 - 	cl38400
-Q#24 - >FvGALT3	superfamily	178735	17	334	1.46781e-75	240.642	cl31980	PLN03193 superfamily	 - 	 - 
-Q#25 - >FvGALT4	superfamily	473923	118	313	8.71485e-56	180.983	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#26 - >FvGALT5	superfamily	178735	1	370	0	574.225	cl31980	PLN03193 superfamily	 - 	 - 
-Q#27 - >FvGALT6	superfamily	215596	134	676	4.93001e-135	410.73	cl27711	PLN03133 superfamily	 - 	 - 
-Q#28 - >FvGALT7	superfamily	473923	103	278	3.32179e-52	170.582	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#29 - >FvGALT8	specific	178735	4	407	0	797.641	PLN03193	PLN03193	 - 	cl31980
-Q#30 - >FvGALT9	superfamily	473923	88	231	6.82754e-11	60.4151	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#31 - >FvGALT10	superfamily	215596	15	648	0	738.535	cl27711	PLN03133 superfamily	 - 	 - 
-Q#32 - >FvGALT11	superfamily	215596	22	653	0	1175.35	cl27711	PLN03133 superfamily	 - 	 - 
-Q#33 - >FvGALT12	superfamily	215596	101	606	2.86951e-106	333.69	cl27711	PLN03133 superfamily	 - 	 - 
-Q#34 - >FvGALT13	superfamily	178735	3	329	9.49226e-92	279.932	cl31980	PLN03193 superfamily	 - 	 - 
-Q#35 - >FvGALT14	superfamily	178735	13	405	0	586.166	cl31980	PLN03193 superfamily	 - 	 - 
-Q#36 - >FvGALT15	superfamily	215596	72	652	1.77307e-140	423.827	cl27711	PLN03133 superfamily	 - 	 - 
-Q#37 - >FvGALT16	superfamily	178735	5	405	0	611.589	cl31980	PLN03193 superfamily	 - 	 - 
-Q#38 - >FvGALT17	specific	178735	1	407	0	840.013	PLN03193	PLN03193	 - 	cl31980
-Q#39 - >FvGALT18	superfamily	473923	103	229	1.02935e-06	49.2443	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#39 - >FvGALT18	superfamily	473923	359	465	0.000278289	42.3107	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#40 - >FvGALT19	superfamily	178735	78	333	1.78381e-90	276.466	cl31980	PLN03193 superfamily	N	 - 
-Q#40 - >FvGALT19	specific	463847	15	93	0.000218098	39.5917	pfam13334	DUF4094	 - 	cl38400
-Q#41 - >MdGALT1	superfamily	178735	51	456	0	536.475	cl31980	PLN03193 superfamily	 - 	 - 
-Q#42 - >MdGALT2	superfamily	473923	127	322	4.30537e-54	176.745	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#43 - >MdGALT3	superfamily	178735	112	443	1.45857e-97	298.807	cl31980	PLN03193 superfamily	 - 	 - 
-Q#44 - >MdGALT4	superfamily	178735	11	404	0	593.87	cl31980	PLN03193 superfamily	 - 	 - 
-Q#45 - >MdGALT5	superfamily	178735	3	169	2.77017e-48	161.291	cl31980	PLN03193 superfamily	NC	 - 
-Q#46 - >MdGALT6	superfamily	215596	112	654	8.89335e-129	393.782	cl27711	PLN03133 superfamily	 - 	 - 
-Q#47 - >MdGALT7	superfamily	178735	80	339	4.73059e-96	290.718	cl31980	PLN03193 superfamily	N	 - 
-Q#47 - >MdGALT7	specific	463847	17	95	3.00993e-07	47.6809	pfam13334	DUF4094	 - 	cl38400
-Q#48 - >MdGALT8	specific	215596	1	630	0	1252.01	PLN03133	PLN03133	 - 	cl27711
-Q#49 - >MdGALT9	superfamily	215596	142	664	5.33298e-129	404.952	cl27711	PLN03133 superfamily	 - 	 - 
-Q#49 - >MdGALT9	superfamily	473071	790	991	5.91123e-59	201.095	cl17173	AdoMet_MTases superfamily	 - 	 - 
-Q#49 - >MdGALT9	specific	400439	678	730	9.79316e-14	66.4477	pfam08100	dimerization	 - 	cl06920
-Q#50 - >MdGALT10	superfamily	178735	9	396	0	596.952	cl31980	PLN03193 superfamily	 - 	 - 
-Q#51 - >MdGALT11	specific	178735	1	407	0	823.449	PLN03193	PLN03193	 - 	cl31980
-Q#52 - >MdGALT12	superfamily	215596	8	515	2.73407e-125	379.914	cl27711	PLN03133 superfamily	N	 - 
-Q#53 - >MdGALT13	superfamily	215596	134	676	1.8227e-132	404.182	cl27711	PLN03133 superfamily	 - 	 - 
-Q#54 - >MdGALT14	superfamily	178735	179	578	0	651.265	cl31980	PLN03193 superfamily	 - 	 - 
-Q#54 - >MdGALT14	specific	461341	21	173	1.61583e-33	125.66	pfam04520	Senescence_reg	 - 	cl04561
-Q#55 - >MdGALT15	superfamily	178735	1	409	0	774.529	cl31980	PLN03193 superfamily	 - 	 - 
-Q#56 - >MdGALT16	specific	178735	1	407	0	837.701	PLN03193	PLN03193	 - 	cl31980
-Q#57 - >MdGALT17	superfamily	473923	114	228	1.55398e-09	56.5631	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#58 - >MdGALT18	superfamily	215596	15	644	0	722.357	cl27711	PLN03133 superfamily	 - 	 - 
-Q#59 - >MdGALT19	superfamily	444925	2	59	1.27625e-15	72.8503	cl00470	AKR_SF superfamily	C	 - 
-Q#59 - >MdGALT19	superfamily	178735	74	115	1.70602e-05	44.1903	cl31980	PLN03193 superfamily	NC	 - 
-Q#60 - >MdGALT20	superfamily	178735	1	417	0	754.113	cl31980	PLN03193 superfamily	 - 	 - 
-Q#61 - >MdGALT21	superfamily	215596	25	652	3.93656e-130	397.248	cl27711	PLN03133 superfamily	 - 	 - 
-Q#62 - >MdGALT22	superfamily	178735	3	395	0	602.344	cl31980	PLN03193 superfamily	 - 	 - 
-Q#63 - >MdGALT23	superfamily	178735	11	404	0	585.396	cl31980	PLN03193 superfamily	 - 	 - 
-Q#64 - >MdGALT24	superfamily	178735	169	568	0	664.362	cl31980	PLN03193 superfamily	 - 	 - 
-Q#64 - >MdGALT24	specific	461341	55	163	8.53659e-31	117.956	pfam04520	Senescence_reg	N	cl04561
-Q#65 - >MdGALT25	superfamily	215596	31	572	3.71214e-136	409.96	cl27711	PLN03133 superfamily	 - 	 - 
-Q#66 - >MdGALT26	superfamily	178735	16	333	1.51195e-79	248.731	cl31980	PLN03193 superfamily	 - 	 - 
-Q#67 - >MdGALT27	superfamily	473923	106	299	4.12854e-58	186.375	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#68 - >MdGALT28	specific	215596	1	630	0	1234.67	PLN03133	PLN03133	 - 	cl27711
-Q#69 - >MdGALT29	superfamily	473923	111	304	2.3579e-56	182.138	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#70 - >MdGALT30	superfamily	178735	80	341	8.67148e-98	295.34	cl31980	PLN03193 superfamily	N	 - 
-Q#70 - >MdGALT30	specific	463847	17	95	9.6648e-06	43.4437	pfam13334	DUF4094	 - 	cl38400
-Q#71 - >MdGALT31	specific	461378	210	465	3.06388e-132	383.027	pfam04646	DUF604	 - 	cl47895
-Q#72 - >MdGALT32	superfamily	178735	84	343	3.97768e-93	283.399	cl31980	PLN03193 superfamily	N	 - 
-Q#72 - >MdGALT32	specific	463847	21	99	2.21008e-07	48.0661	pfam13334	DUF4094	 - 	cl38400
-Q#73 - >MdGALT33	superfamily	473923	125	320	4.1494e-58	187.146	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#74 - >PbGALT1	superfamily	178735	1	400	0	653.961	cl31980	PLN03193 superfamily	 - 	 - 
-Q#75 - >PbGALT2	superfamily	473923	123	318	2.85647e-56	182.523	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#76 - >PbGALT3	superfamily	178735	75	288	2.30103e-36	134.327	cl31980	PLN03193 superfamily	N	 - 
-Q#77 - >PbGALT4	superfamily	473923	109	302	6.20405e-57	183.679	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#78 - >PbGALT5	superfamily	473923	109	283	6.29653e-50	163.649	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#79 - >PbGALT6	superfamily	178735	80	339	6.62314e-99	298.037	cl31980	PLN03193 superfamily	N	 - 
-Q#79 - >PbGALT6	specific	463847	17	95	8.05034e-07	46.5253	pfam13334	DUF4094	 - 	cl38400
-Q#80 - >PbGALT7	specific	178735	1	407	0	840.398	PLN03193	PLN03193	 - 	cl31980
-Q#81 - >PbGALT8	specific	178735	1	404	0	830.768	PLN03193	PLN03193	 - 	cl31980
-Q#82 - >PbGALT9	superfamily	178735	16	333	7.44333e-79	246.805	cl31980	PLN03193 superfamily	 - 	 - 
-Q#83 - >PpGALT1	superfamily	473923	130	238	7.18126e-11	60.4151	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#84 - >PpGALT2	superfamily	473923	87	254	2.06084e-12	65.0375	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#85 - >PpGALT3	superfamily	215596	17	649	0	736.224	cl27711	PLN03133 superfamily	 - 	 - 
-Q#86 - >PpGALT4	superfamily	215596	127	688	6.80356e-124	382.226	cl27711	PLN03133 superfamily	 - 	 - 
-Q#87 - >PpGALT5	specific	215596	1	630	0	1259.32	PLN03133	PLN03133	 - 	cl27711
-Q#88 - >PpGALT6	superfamily	473923	123	318	9.00081e-60	196.391	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#89 - >PpGALT7	superfamily	178735	16	333	2.45352e-79	247.961	cl31980	PLN03193 superfamily	 - 	 - 
-Q#90 - >PpGALT8	superfamily	178735	51	451	0	619.678	cl31980	PLN03193 superfamily	 - 	 - 
-Q#91 - >PpGALT9	superfamily	473923	64	224	6.19548e-08	51.5555	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#92 - >PpGALT10	superfamily	178735	1	339	1.26506e-95	289.948	cl31980	PLN03193 superfamily	 - 	 - 
-Q#93 - >PpGALT11	superfamily	178735	1	358	0	739.476	cl31980	PLN03193 superfamily	 - 	 - 
-Q#94 - >PpGALT12	superfamily	178735	202	607	0	648.183	cl31980	PLN03193 superfamily	 - 	 - 
-Q#94 - >PpGALT12	specific	461341	23	194	2.9506e-35	130.667	pfam04520	Senescence_reg	 - 	cl04561
-Q#95 - >PpGALT13	superfamily	215596	153	684	4.23095e-132	403.412	cl27711	PLN03133 superfamily	 - 	 - 
-Q#96 - >PpGALT14	superfamily	473923	108	317	1.35021e-57	185.605	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#97 - >PpGALT15	specific	178735	1	405	0	792.633	PLN03193	PLN03193	 - 	cl31980
-Q#98 - >PpGALT16	specific	461378	207	458	7.86349e-137	394.583	pfam04646	DUF604	 - 	cl47895
-Q#99 - >PpGALT17	specific	461378	207	457	7.60126e-133	384.182	pfam04646	DUF604	 - 	cl47895
-Q#100 - >PpGALT18	superfamily	178735	1	341	3.63375e-98	296.111	cl31980	PLN03193 superfamily	 - 	 - 
-Q#101 - >PpGALT19	superfamily	178735	11	397	0	602.73	cl31980	PLN03193 superfamily	 - 	 - 
-Q#102 - >PpGALT20	superfamily	215596	32	653	1.39063e-132	403.412	cl27711	PLN03133 superfamily	 - 	 - 
-Q#103 - >PpGALT21	superfamily	178735	98	495	0	546.491	cl31980	PLN03193 superfamily	 - 	 - 
-Q#104 - >SlGALT1	superfamily	215596	134	661	4.33601e-130	397.634	cl27711	PLN03133 superfamily	 - 	 - 
-Q#105 - >SlGALT2	superfamily	215596	126	668	2.89917e-137	416.123	cl27711	PLN03133 superfamily	 - 	 - 
-Q#106 - >SlGALT3	superfamily	215596	47	587	7.76436e-132	399.56	cl27711	PLN03133 superfamily	 - 	 - 
-Q#107 - >SlGALT4	specific	215596	1	629	0	1201.16	PLN03133	PLN03133	 - 	cl27711
-Q#108 - >SlGALT5	superfamily	215596	13	653	0	683.066	cl27711	PLN03133 superfamily	 - 	 - 
-Q#109 - >SlGALT6	superfamily	215596	123	666	6.14577e-142	428.064	cl27711	PLN03133 superfamily	 - 	 - 
-Q#110 - >SlGALT7	superfamily	473923	116	229	7.4747e-10	57.7187	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#111 - >SlGALT8	superfamily	473923	65	226	1.8385e-08	53.4815	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#112 - >SlGALT9	superfamily	178735	1	406	0	766.439	cl31980	PLN03193 superfamily	 - 	 - 
-Q#113 - >SlGALT10	superfamily	178735	70	336	1.45716e-54	184.018	cl31980	PLN03193 superfamily	N	 - 
-Q#114 - >SlGALT11	superfamily	178735	4	408	0	783.388	cl31980	PLN03193 superfamily	 - 	 - 
-Q#115 - >SlGALT12	superfamily	178735	65	344	1.29185e-80	251.813	cl31980	PLN03193 superfamily	 - 	 - 
-Q#116 - >SlGALT13	superfamily	178735	5	394	0	563.439	cl31980	PLN03193 superfamily	 - 	 - 
-Q#117 - >SlGALT14	superfamily	178735	81	343	1.31911e-94	287.251	cl31980	PLN03193 superfamily	N	 - 
-Q#117 - >SlGALT14	specific	463847	18	90	0.000532699	38.4361	pfam13334	DUF4094	 - 	cl38400
-Q#118 - >SlGALT15	superfamily	178735	8	113	6.48549e-58	184.018	cl31980	PLN03193 superfamily	N	 - 
-Q#119 - >SlGALT16	superfamily	473923	103	297	2.72879e-54	176.745	cl21608	Galactosyl_T superfamily	 - 	 - 
-Q#120 - >SlGALT17	superfamily	178735	9	396	0	603.885	cl31980	PLN03193 superfamily	 - 	 - 
-Q#121 - >SlGALT18	superfamily	178735	3	392	0	560.743	cl31980	PLN03193 superfamily	 - 	 - 
-Q#122 - >SlGALT19	superfamily	178735	1	395	0	734.853	cl31980	PLN03193 superfamily	 - 	 - 
-Q#123 - >SlGALT20	superfamily	178735	8	259	1.49049e-123	357.743	cl31980	PLN03193 superfamily	N	 - 
+Q#1 - >MdGALT1	superfamily	178735	51	456	0	536.475	cl31980	PLN03193 superfamily	 - 	 - 
+Q#2 - >MdGALT2	superfamily	473923	127	322	4.30537e-54	176.745	cl21608	Galactosyl_T superfamily	 - 	 - 
+Q#3 - >MdGALT3	superfamily	178735	112	443	1.45857e-97	298.807	cl31980	PLN03193 superfamily	 - 	 - 
+Q#4 - >MdGALT4	superfamily	178735	11	404	0	593.87	cl31980	PLN03193 superfamily	 - 	 - 
+Q#5 - >MdGALT5	superfamily	178735	3	169	2.77017e-48	161.291	cl31980	PLN03193 superfamily	NC	 - 
+Q#6 - >MdGALT6	superfamily	215596	112	654	8.89335e-129	393.782	cl27711	PLN03133 superfamily	 - 	 - 
+Q#7 - >MdGALT7	superfamily	178735	80	339	4.73059e-96	290.718	cl31980	PLN03193 superfamily	N	 - 
+Q#7 - >MdGALT7	specific	463847	17	95	3.00993e-07	47.6809	pfam13334	DUF4094	 - 	cl38400
+Q#8 - >MdGALT8	specific	215596	1	630	0	1252.01	PLN03133	PLN03133	 - 	cl27711
+Q#9 - >MdGALT9	superfamily	215596	142	664	5.33298e-129	404.952	cl27711	PLN03133 superfamily	 - 	 - 
+Q#9 - >MdGALT9	superfamily	473071	790	991	5.91123e-59	201.095	cl17173	AdoMet_MTases superfamily	 - 	 - 
+Q#9 - >MdGALT9	specific	400439	678	730	9.79316e-14	66.4477	pfam08100	dimerization	 - 	cl06920
+Q#10 - >MdGALT10	superfamily	178735	9	396	0	596.952	cl31980	PLN03193 superfamily	 - 	 - 
+Q#11 - >MdGALT11	specific	178735	1	407	0	823.449	PLN03193	PLN03193	 - 	cl31980
+Q#12 - >MdGALT12	superfamily	215596	8	515	2.73407e-125	379.914	cl27711	PLN03133 superfamily	N	 - 
+Q#13 - >MdGALT13	superfamily	215596	134	676	1.8227e-132	404.182	cl27711	PLN03133 superfamily	 - 	 - 
+Q#14 - >MdGALT14	superfamily	178735	179	578	0	651.265	cl31980	PLN03193 superfamily	 - 	 - 
+Q#14 - >MdGALT14	specific	461341	21	173	1.61583e-33	125.66	pfam04520	Senescence_reg	 - 	cl04561
+Q#15 - >MdGALT15	superfamily	178735	1	409	0	774.529	cl31980	PLN03193 superfamily	 - 	 - 
+Q#16 - >MdGALT16	specific	178735	1	407	0	837.701	PLN03193	PLN03193	 - 	cl31980
+Q#17 - >MdGALT17	superfamily	473923	114	228	1.55398e-09	56.5631	cl21608	Galactosyl_T superfamily	 - 	 - 
+Q#18 - >MdGALT18	superfamily	215596	15	644	0	722.357	cl27711	PLN03133 superfamily	 - 	 - 
+Q#19 - >MdGALT19	superfamily	444925	2	59	1.27625e-15	72.8503	cl00470	AKR_SF superfamily	C	 - 
+Q#19 - >MdGALT19	superfamily	178735	74	115	1.70602e-05	44.1903	cl31980	PLN03193 superfamily	NC	 - 
+Q#20 - >MdGALT20	superfamily	178735	1	417	0	754.113	cl31980	PLN03193 superfamily	 - 	 - 
+Q#21 - >MdGALT21	superfamily	215596	25	652	3.93656e-130	397.248	cl27711	PLN03133 superfamily	 - 	 - 
+Q#22 - >MdGALT22	superfamily	178735	3	395	0	602.344	cl31980	PLN03193 superfamily	 - 	 - 
+Q#23 - >MdGALT23	superfamily	178735	11	404	0	585.396	cl31980	PLN03193 superfamily	 - 	 - 
+Q#24 - >MdGALT24	superfamily	178735	169	568	0	664.362	cl31980	PLN03193 superfamily	 - 	 - 
+Q#24 - >MdGALT24	specific	461341	55	163	8.53659e-31	117.956	pfam04520	Senescence_reg	N	cl04561
+Q#25 - >MdGALT25	superfamily	215596	31	572	3.71214e-136	409.96	cl27711	PLN03133 superfamily	 - 	 - 
+Q#26 - >MdGALT26	superfamily	178735	16	333	1.51195e-79	248.731	cl31980	PLN03193 superfamily	 - 	 - 
+Q#27 - >MdGALT27	superfamily	473923	106	299	4.12854e-58	186.375	cl21608	Galactosyl_T superfamily	 - 	 - 
+Q#28 - >MdGALT28	specific	215596	1	630	0	1234.67	PLN03133	PLN03133	 - 	cl27711
+Q#29 - >MdGALT29	superfamily	473923	111	304	2.3579e-56	182.138	cl21608	Galactosyl_T superfamily	 - 	 - 
+Q#30 - >MdGALT30	superfamily	178735	80	341	8.67148e-98	295.34	cl31980	PLN03193 superfamily	N	 - 
+Q#30 - >MdGALT30	specific	463847	17	95	9.6648e-06	43.4437	pfam13334	DUF4094	 - 	cl38400
+Q#31 - >MdGALT31	specific	461378	210	465	3.06388e-132	383.027	pfam04646	DUF604	 - 	cl47895
+Q#32 - >MdGALT32	superfamily	178735	84	343	3.97768e-93	283.399	cl31980	PLN03193 superfamily	N	 - 
+Q#32 - >MdGALT32	specific	463847	21	99	2.21008e-07	48.0661	pfam13334	DUF4094	 - 	cl38400
+Q#33 - >MdGALT33	superfamily	473923	125	320	4.1494e-58	187.146	cl21608	Galactosyl_T superfamily	 - 	 - 
