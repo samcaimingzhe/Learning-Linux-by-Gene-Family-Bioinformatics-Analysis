@@ -712,8 +712,14 @@ Rscript cd_motif_gene_1.0.R
 wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/cd_motif_gene_2.0.R
 Rscript cd_motif_gene_2.0.R
 ```
-运行`2.0`会覆盖`1.0`的结果，所以请先运行`1.0`查看一下图片，再运行`2.0`。
+运行`2.0`会覆盖`1.0`的结果，所以请先运行`1.0`查看一下图片，再运行`2.0`。最后会生成：
+- `tree_motif_cd_gene.png`和`tree_motif_cd_gene.pdf`
+- `motif.png`和`motif.pdf`
+- `cd.png`和`cd.pdf`
+- `gene.png`和`gene.pdf`
 
+组合到一起的图是没有图例的，因为带着图例合并会很不美观。我们采取先合并无图例的，再生成有图例的小图，最后把图例截图。可以选择放到Adobe Illustrator里贴图。当然Microsoft Powerpoint可是个不错的替代：
+<img width="3900" height="1915" alt="plot" src="https://github.com/user-attachments/assets/3414fb44-66aa-45b9-93d9-1448817dbf4e" />
 
 
 
