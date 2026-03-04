@@ -9,6 +9,19 @@
 > 
 > 目前关于基因家族分析的教程很多，但是以Linux为主且比较全面的较少。而且很多同学可能会希望入门Linux生物信息学分析，本教程会给大家示范如何使用Linux完成一整套基因家族分析，这不只是一个基因家族分析的教程，还是一份Linux入门的教程。
 
+## 概述
+我们会在这一起学到：
+- 如何找到合适的文件与数据库
+- 在Linux中如何下载并安装软件
+- 基因家族候选蛋白的鉴定
+- 基因家族蛋白与基因的结构分析
+- 基因家族蛋白理化性质分析
+- 基因家族共线性分析
+- 基因家族顺式作用元件分析
+- 基于RNA-seq转录组分析
+- 基因家族蛋白互作分析
+- 基于Alphafold的蛋白质3D结构预测
+
 # 我们来了解一下需要使用到的文件和数据库
 我们所需要的文件本质上都是文本文件，也就是txt，大家平常用记事本打开的。
 
@@ -720,6 +733,18 @@ Rscript cd_motif_gene_2.0.R
 
 组合到一起的图是没有图例的，因为带着图例合并会很不美观。我们采取先合并无图例的，再生成有图例的小图，最后把图例截图。可以选择放到Adobe Illustrator里贴图。当然Microsoft Powerpoint可是个不错的替代：
 <img width="3900" height="1915" alt="plot" src="https://github.com/user-attachments/assets/3414fb44-66aa-45b9-93d9-1448817dbf4e" />
+
+# 蛋白理化性质分析
+这是最简单的分析了，因为只需要到[Expasy ProtParam](https://web.expasy.org/protparam/)上上传文件再下载文件，放在Excel里处理一下即可。缺点是只能一个一个上传。在TBtools中有一个插件可以批量进行预测，我想大家应该都是先接触的TBtools。
+
+**很遗憾**在Linux中我没有找到很好用的软件，所以我自己写了一个python脚本：
+```bash
+cd ../..
+weget 
+pip install BIO
+python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
+```
+如果有任何报错就换几个环境，可能与python版本有关系。
 
 
 
