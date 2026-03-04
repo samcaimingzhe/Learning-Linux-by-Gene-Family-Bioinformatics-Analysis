@@ -506,7 +506,10 @@ bash extract_family_proteins.sh
 ## 多序列比对
 ```bash
 conda install -c bioconda clustalw
+cd ..
 mkdir phylogeny
+cp result/Merged.galt.simplified.pep phylogeny
+cd phylogeny
 ```
 `clustalw`的玩法和刚刚的软件不一样，不是一行一行运行的。我们只用输入`clustalw`然后回车。
 ```bash
@@ -525,7 +528,7 @@ mkdir phylogeny
 
 Your choice: 
 ```
-我们先使用`1.`，然后输入`result/Merged.galt.simplified.pep`。回车后会返回原来的界面，再输入`2.`会进入这个界面再输入`1.`：
+我们先使用`1.`，然后输入`Merged.galt.simplified.pep`。回车后会返回原来的界面，再输入`2.`会进入这个界面再输入`1.`：
 ```bash
 ****** MULTIPLE ALIGNMENT MENU ******
 
@@ -549,15 +552,15 @@ Your choice:
 
 Your choice: 
 ```
-然后继续回车就好了，会有默认命名的文件生成。但是我们也可以修改文件名，比如从`result/Merged.galt.simplified.dnd`改为`phylogeny/Merged.galt.simplified.dnd`。
+然后继续回车就好了，会有默认命名的文件生成。但是我们也可以修改文件名，比如从`Merged.galt.simplified.dnd`改为`xxx.dnd`。当然一般情况回车是最方便的：
 ```bash
-Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.aln]: phylogeny/Merged.galt.simplified.aln
-Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.dnd]: phylogeny/Merged.galt.simplified.dnd
+Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.aln]:
+Enter a name for the CLUSTAL output file  [result/Merged.galt.simplified.dnd]:
 ```
 ## 系统发育进化树
 跑完之后就多次输入`x`退出到最初的界面，输入`4.`，然后输入`5.`：
 ```bash
-Enter name for bootstrap output file   [result/Merged.galt.simplified.phb]: phylogeny/Merged.galt.simplified.phb
+Enter name for bootstrap output file   [Merged.galt.simplified.phb]: 
 Enter seed no. for random number generator  (1..1000)    [111]: 79
 Enter number of bootstrap trials  (1..10000)    [1000]: 1000
 ```
@@ -574,8 +577,6 @@ Enter number of bootstrap trials  (1..10000)    [1000]: 1000
 
 所以我们需要对`Merged.galt.simplified.pep`进行序列ID的提取。这一部分可能需要手动去除，因为不是所有序列的命名格式都是`.1.2.3.4`这样子。
 ```bash
-cp result/Merged.galt.simplified.pep phylogeny
-cd phylogeny
 grep '>' Merged.galt.simplified.pep | sed 's/>//' > Merged.galt.id
 cat Merged.galt.id
 ```
@@ -620,10 +621,22 @@ cp Merged.galt.id.3 rename.id
 ```
 用Excel打开`rename.id`进行操作，可以在第二列按照自己的意愿命名，最后保存为原本的格式就好。这里可以直接下载我处理好的：
 ```bash
-
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/rename.id
+seqkit replace -p "(.+)" -r '{kv}' -k rename.id Merged.galt.simplified.3.pep > renamed.galt.simplified.pep
+clustalw
 ```
+我们就可以愉快做图啦！这里放一些重要的设置参数：
+**Basic**:
+- Branch lengths选ignore
 
+**Advanced**:
+- Bootstraps / metadata选display，显示为text
+- Display range: 7000-1000
 
+<img width="12387" height="10154" alt="7GPIRlRDE0ykL5-xb4-WEA" src="https://github.com/user-attachments/assets/59e63e3b-dd8d-4fad-a362-1ee3ec413b1b" />
 
+我们简单把图做成这样。我们经验性认为bootstrap > 70% total bootstrap为一支聚类效果不错的小分支。按照这个小指引以及视觉上的树形来分割亚家族。
+
+# Motif、保守结构域与基因结构分析
 
 
