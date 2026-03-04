@@ -10,7 +10,8 @@
 > 目前关于基因家族分析的教程很多，但是以Linux为主且比较全面的较少。而且很多同学可能会希望入门Linux生物信息学分析，本教程会给大家示范如何使用Linux完成一整套基因家族分析，这不只是一个基因家族分析的教程，还是一份Linux入门的教程。
 
 # 我们来了解一下需要使用到的文件和数据库
-我们所需要的文件本质上都是文本文件。
+我们所需要的文件本质上都是文本文件，也就是txt，大家平常用记事本打开的。
+
 **fasta：专门用于储存序列的文件**
 - 大于号>表示序列ID，下面是序列
 - 一个fasta文件里可以包含一个或者多个序列。以下展示的是蛋白质序列，fasta还可以储存DNA序列、RNA序列。如果是基因DNA序列则不会太长，文件较小。但若是染色体DNA序列，文件会很大。
@@ -39,21 +40,21 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 1	araport11	exon	3631	3913	.	+	.	Parent=transcript:AT1G01010.1;Name=AT1G01010.1.exon1;constitutive=1;ensembl_end_phase=1;ensembl_phase=-1;exon_id=AT1G01010.1.exon1;rank=1
 1	araport11	CDS	3760	3913	.	+	0	ID=CDS:AT1G01010.1;Parent=transcript:AT1G01010.1;protein_id=AT1G01010.1
 ```
-为了方便后续使用这些文件，我们通常把原文件重命名，按照物种名和文件存储内容，比如拟南芥染色体基因组（ath.chr或ath.fa）、拟南芥蛋白质（ath.pep/ath.prot）、拟南芥基因注释文件（ath.gff3）。chr取自chromosome、pep取自peptide、prot取自protein。简单的文件名会让我们在输入文件路径的时候更加方便。
+为了方便后续使用这些文件，我们通常把原文件重命名，按照物种名和文件存储内容，比如拟南芥染色体基因组`ath.chr/ath.fa`、拟南芥蛋白质`ath.pep/ath.prot`、拟南芥基因注释文件`ath.gff3`。chr取自chromosome、pep取自peptide、prot取自protein。简单的文件名会让我们在输入文件路径的时候更加方便。
 
 ## 如何在你的基因组中鉴定出你的基因家族
 我们需要：
-- 基因组文件：染色体文件（fasta）、蛋白质文件(fasta)、基因注释文件(gff3)
-- 基因家族文件： 目标蛋白文件（fasta）
+- 基因组文件：染色体文件`.fasta`、蛋白质文件`.fasta`、基因注释文件`.gff3`
+- 基因家族文件： 目标蛋白文件`.fasta`
 
-根据物种来判断你需要从什么数据库找到这些文件
+根据物种来判断你需要从什么数据库找到这些文件:
 - 双子叶植物一般以拟南芥作为参考
 - 单子叶植物以玉米、水稻、小麦、大麦、大豆作为参考。
 
 ## 找到你的基因家族蛋白质文件
 我们需要：
-- 参考物种基因组此基因家族的蛋白质序列fasta
-- 此基因家族的隐马尔可夫Profile文件
+- 参考物种基因组此基因家族的蛋白质序列`.fasta`
+- 此基因家族的隐马尔可夫档案文件`.hmm`（Profile HMM）
 
 举个例子，假设我们的目的是找到苹果中bZIP家族的蛋白质，我们就需要在TAIR中找到拟南芥全部的bZIP蛋白质序列。
 
@@ -62,9 +63,9 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 当然寻找蛋白质我们不只有TAIR，我们还有非常多蛋白质数据库：
 - [Uniprot](https://www.uniprot.org/)：一个我个人非常喜欢、强烈推荐的一个去冗余的蛋白质数据库。界面干净友好、链接多种数据库。
 - [RefSeq](https://www.ncbi.nlm.nih.gov/refseq/)：NCBI的蛋白质数据库，初期不推荐使用，因为存在冗余序列。
-- [PDB](https://www.rcsb.org/)：蛋白质结构数据库，有实验室获取的蛋白质晶体结构，目前不在本课题的讨论范围之内。
-- [AlphaFold Protein Structure Database](https://alphafold.ebi.ac.uk/)：AlphaFold蛋白质结构数据库，后期可能会用到。
-**解释一下“去冗余”**：简单来说，去冗余就是剔除数据库中高度相似或重复的信息，只保留具有代表性的序列。某些热门蛋白（如血红蛋白、胰岛素）可能被成千上万次重复测序并上传，他们命名不同，但本质上就是同一种蛋白质。
+- [PDB](https://www.rcsb.org/)：蛋白质结构数据库，有实验室获取的蛋白质晶体结构，目前不在本教程的讨论范围之内。
+- [AlphaFold Protein Structure Database](https://alphafold.ebi.ac.uk/)：AlphaFold蛋白质结构数据库，后期可能会用于预测蛋白结构。
+> **解释一下“去冗余”**：简单来说，去冗余就是剔除数据库中高度相似或重复的信息，只保留具有代表性的序列。某些热门蛋白（如血红蛋白、胰岛素）可能被成千上万次重复测序并上传，他们命名不同，但本质上就是同一种蛋白质。
 
 同样在此罗列一些植物基因组数据库，方便我们后续下载基因组
 - Ensembl Plants：大部分植物 https://plants.ensembl.org/index.html
@@ -84,15 +85,16 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 - CuGenDBv2：葫芦科 http://cucurbitgenomics.org/v2/
 - BRAD：十字花科 http://brassicadb.cn/#/
 
-特别特别特殊的物种，可以在论文里查看是从哪获取的，可以到NCBI到数据库里再找找看。同时请注意并非所有的基因组都来自公共数据库，他们可能来自一些实验室内部的测序数据。
+> 特别特别特殊的物种，可以在论文里查看是从哪获取的，可以到NCBI到数据库里再找找看。同时请注意并非所有的基因组都来自公共数据库，他们可能来自一些实验室内部的测序数据。
 
 # 让我们一起开始探索基因家族的宇宙吧！
-我们的操作系统是MacOS，只需要终端，建议安装一个[Warp]( https://www.warp.dev/)
+我们的操作系统是MacOS，只需要终端，建议安装一个[Warp]( https://www.warp.dev/)。
+
 如果是Windows系统，请安装Linux虚拟机或者[WSL (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install)
 
 如果你做的是我们耳熟能详的基因家族，比如：bZIP、MAPK、MYB、NAC、U-box、WRKY、WOX等等。
 则进入网站后点击 Browse -> Gene Families，或者点击这个网址 https://www.arabidopsis.org/browse/gene_family
-但是你也可能被安排做一个不那么广为人知的基因家族、比如半乳糖基转移酶。那我们该怎么办呢？
+但是你也可能被安排做一个不那么广为人知的基因家族、比如半乳糖基转移酶（我当年的的课题）。那我们该怎么办呢？
 
 首先我们可以从一些论文中获得，如果这个基因家族在其他物种中有研究过，他们可能会提供在参考物种基因组（比如拟南芥）的蛋白质序列（不太可能）或者蛋白质ID（有些可能），以及pfam号（很有可能）。
 
