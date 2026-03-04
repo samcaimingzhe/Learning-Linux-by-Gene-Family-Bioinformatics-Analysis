@@ -510,7 +510,6 @@ bash extract_family_proteins.sh
 ## 多序列比对
 ```bash
 conda install -c bioconda clustalw
-cd ..
 mkdir phylogeny
 cp result/Merged.galt.simplified.pep phylogeny
 cd phylogeny
@@ -652,29 +651,35 @@ cd  motif_cd_gene/
 
 conda install -c bioconda meme
 ```
+安装meme的时候可能会报错，因为大部分可安装的`meme`需要`python=2.7`，只需要`conda create -n py2.7 python=2.7`，然后在新环境里安装`meme`即可。
 可以本地跑也可以选择[网站](https://meme-suite.org/meme/tools/meme)跑，并下载meme.xml文件。之后我们获得的一些用于做图的文件都要保存到新文件夹`plot`中。本地跑会自动生成一个`meme_out`的文件夹，结果都储存在里面。此外我们还需要跑一次进化树，但这一次我们之跑`Md.GALT.pep`:
 ```bash
 grep 'MdGALT' renamed.galt.simplified.pep | sed 's/>//' > Md.renamed.galt.id
 seqkit grep -f Md.renamed.galt.id renamed.galt.simplified.pep -o Md.renamed.galt.pep
 meme Md.renamed.galt.pep -protein -nmotifs 10
 mkdir plot
-cp meme_out/meme.xml plot/
+mv meme_out/meme.xml Md.renamed.galt.pep plot/
 ```
 之前在Batch CD-Search做了保守结构域预测，但是当时我们的序列ID还是原始的，现在已经修改完了，所以我们继续可以在上传一次`Md.renamed.galt.pep`来获取`hitdata.txt`
 ```bash
 wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/hitdata.txt
 mv hitdata.txt plot/
+grep '>' plot/hitdata.txt | awk '{print $3 "\t" $6 "\t" $7 "\t" $11}' | sed 's/>//' > cd.info
 ```
 最后就是获取基因结构，这个少许需要大家的注意：
 ```bash
 grep 'ANT' ../phylogeny/Merged.galt.simplified.3.pep | sed 's/>//' > Md.oldname.galt.id
-cp ../identification/annotations/md.gff3 ./
+cp ../annotations/md.gff3 ./
 grep -w -f Md.oldname.galt.id md.gff3 | sed 's/Parent/ID/'| awk '{sub(/ID=/, "", $9); sub(/;.*/, "", $9); print $1 "\t" $3 "\t" $4 "\t" $5 "\t" $9}' > Md.galt.loc.info
 grep 'mRNA' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.mrna.pos
 grep 'CDS' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.cds.pos
 cp ../phylogeny/rename.id *.pos plot/
+```
+然后记得`clustalw`处理一下`Md.renamed.galt.pep`。
+```bash
+mv Md.renamed.galt.pep plot/
 cd plot/
-grep '>' hitdata.txt | awk '{print $3 "\t" $6 "\t" $7 "\t" $11}' | sed 's/>//' > cd.info
+clustalw
 ```
 接下来我们就需要使用到R语言了。不会R语言？没事，我们一起学:
 我们需要安装R语言与Rstudio两个东西，Rstudio像是容器，R语言是灵魂。R语言本身可以单独使用，但是在Rstudio的加持下会使我们的编程变得赏心悦目。
