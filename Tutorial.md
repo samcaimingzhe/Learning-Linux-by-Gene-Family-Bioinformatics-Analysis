@@ -293,11 +293,13 @@ mv Antonovka_hapolomeA_CDS.fa md.cds
 如果你想查看当前路径可以用`pwd`，如果想知道当前路径都有什么文件可以使用`ls`，或者更多变体比如`ls -l`、`ls -lah`。如果想看一个文件的内容可以使用`less md.gff3`，退出按`q`。
 于是乎我们拥有了鉴定基因家族蛋白的全部文件了。我们还差什么呢？
 
-## 我们还差软件
+## 软件安装是个门槛
 我们还需要2个十分重要的软件：
 - `blast`
 - `hmmer`
+
 要想很方便的安装这些软件，我们有**本本分分安装法**与**一劳永逸法**。我们先看看一劳永逸法，因为绝大部分的软件都可以用这个方法，然后在看本本分分安装法，因为有些特殊的软件可能必须得自己安装。
+> **如果你有机会使用课题组的服务器资源，那么很可能里面以及安装了海量生物信息学分析软件，你则无需安装。就可以先跳过软件安装这个环节。**
 
 ### 一劳永逸之Anaconda
 我们要下载一个叫做anaconda的东西，你可以把它理解为很多软件都能通过它安装。等我们安装好我们就可以通过`conda install`来安装我们需要的分析包。如果你学过python应该对`pip install`不陌生，它们都是用来安装包的，而且conda可以用来安装python。
@@ -626,6 +628,7 @@ seqkit replace -p "(.+)" -r '{kv}' -k rename.id Merged.galt.simplified.3.pep > r
 clustalw
 ```
 我们就可以愉快做图啦！这里放一些重要的设置参数：
+
 **Basic**:
 - Branch lengths选ignore
 
@@ -638,5 +641,18 @@ clustalw
 我们简单把图做成这样。我们经验性认为bootstrap > 70% total bootstrap为一支聚类效果不错的小分支。按照这个小指引以及视觉上的树形来分割亚家族。
 
 # Motif、保守结构域与基因结构分析
+我们继续新建一个新的文件夹，把不同分析的文件放在不同路径管理，我会带着大家慢慢养成这个好习惯的：
+```bash
+cd ..
+mkdir motif_cd_gene
+cp phylogeny/renamed.galt.simplified.pep motif_cd_gene
+cd  motif_cd_gene
+
+conda install -c bioconda meme
+```
+可以本地跑也可以选择[网站](https://meme-suite.org/meme/tools/meme)跑，并下载meme.xml文件
+
+
+
 
 
