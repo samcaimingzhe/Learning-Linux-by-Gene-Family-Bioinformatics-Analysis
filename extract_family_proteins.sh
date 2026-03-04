@@ -4,7 +4,7 @@
 # ==========================================
 GENE_NAME="galt"               # Gene family name
 HMM_MODEL="PF01762"            # Your HMM model ID
-BLAST_QUERY="ath.galt.pep"     # Query proteins
+BLAST_QUERY="proteins/ath.galt.pep"     # Query proteins
 EVALUE="10"                    # E-value threshold for BLAST
 # ==========================================
 
@@ -70,5 +70,7 @@ done
 echo ">>> Merging all final sequences..."
 cat result/*."${GENE_NAME}".pep > result/Merged."${GENE_NAME}".unsimplified.pep
 seqkit replace -p "\s.+" -r "" result/Merged."${GENE_NAME}".unsimplified.pep > result/Merged."${GENE_NAME}".simplified.pep
+
+rm *.zip
 
 echo "Success! All sequences have been merged into Merged.${GENE_NAME}.simplified.pep"
