@@ -672,6 +672,7 @@ grep 'mRNA' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.mrna.p
 grep 'CDS' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.cds.pos
 cp ../phylogeny/rename.id *.pos plot/
 cd plot/
+grep '>' hitdata.txt | awk '{print $3 "\t" $6 "\t" $7 "\t" $11}' | sed 's/>//' > cd.info
 ```
 接下来我们就需要使用到R语言了。不会R语言？没事，我们一起学:
 我们需要安装R语言与Rstudio两个东西，Rstudio像是容器，R语言是灵魂。R语言本身可以单独使用，但是在Rstudio的加持下会使我们的编程变得赏心悦目。
