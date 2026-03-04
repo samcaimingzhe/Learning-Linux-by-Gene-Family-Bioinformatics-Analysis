@@ -650,8 +650,15 @@ cd  motif_cd_gene
 
 conda install -c bioconda meme
 ```
-可以本地跑也可以选择[网站](https://meme-suite.org/meme/tools/meme)跑，并下载meme.xml文件
-
+可以本地跑也可以选择[网站](https://meme-suite.org/meme/tools/meme)跑，并下载meme.xml文件。之后我们获得的一些用于做图的文件都要保存到新文件夹`plot`中。本地跑会自动生成一个`meme_out`的文件夹，结果都储存在里面。此外我们还需要跑一次进化树，但这一次我们之跑`Md.GALT.pep`:
+```bash
+grep 'MdGALT' renamed.galt.simplified.pep | sed 's/>//' > Md.renamed.galt.id
+seqkit grep -f Md.renamed.galt.id renamed.galt.simplified.pep -o Md.renamed.galt.pep
+meme Md.renamed.galt.pep -protein -nmotifs 10
+mkdir plot
+cp meme_out/meme.xml plot
+```
+之前在Batch CD-Search做了保守结构域预测，但是当时我们的序列ID还是原始的，现在已经修改完了，所以我们继续可以在上传一次`Md.renamed.galt.pep`来获取`hitdata.txt`
 
 
 
