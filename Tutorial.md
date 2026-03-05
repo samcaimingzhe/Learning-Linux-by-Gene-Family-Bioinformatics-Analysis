@@ -742,11 +742,78 @@ Rscript cd_motif_gene_2.0.R
 cd ../..
 weget 
 pip install BIO
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/prot_analyzer.py
 python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 ```
 如果有任何报错就换几个环境，可能与python版本有关系。
 
+# 共线性分析
+最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=3.5`：
+```bash
+conda create -n py3.5 python=3.5 -y
+conda activate py3.5
+conda install -c bioconda last emboss gffread -y
+conda install -c bioconda jcvi -y
+```
+假设我们只需要处理苹果的文件，我们首先需要把苹果的`gff3`转化为`bed`，比如`python3 -m jcvi.formats.gff bed annotations/md.gff -o beds/md.bed`:
+```bash
+mkdir beds cds
 
+for gff_file in annotations/*.gff3;
+do
+    filename=$(basename "$gff_file")
+    prefix="${filename%%.*}"
+    echo "Processing species: $prefix"
+    echo "Input: $gff_file"
+
+    python -m jcvi.formats.gff bed --type=mRNA "$gff_file" -o "beds/$prefix.bed"
+    gffread "$gff_file" -g "chromosomes/$prefix.chr" -x "cds/$prefix.cds"
+
+    echo "Successfully created: $prefix.bed & $prefix.cds"
+done
+echo "All done! BED & CDS files are ready."
+```
+检查一下提取情况：
+```bash
+head cds/*.cds
+head beds/*.bed
+```
+```bash
+mkdir cdsbed
+cp cds/*.cds beds/*.bed cdsbed
+cd cdsbed
+
+for cds_file in *.cds;
+do
+    filename=$(basename "$cds_file")
+    prefix="${filename%%.*}"
+
+    python -m jcvi.compara.catalog ortholog --no_strip_names --cscore=.99 md $prefix
+    python -m jcvi.compara.synteny screen --minspan=30 --dist=100 md.$prefix.anchors md.$prefix.anchors.simple
+
+    echo "Successfully created: md.vs.$prefix"
+done
+echo "All done! ANCHORS files are ready."
+```
+
+```bash
+# 创建一个文本文件叫 seqids
+# 第一行是 Md 的染色体，第二行是 At 的染色体
+vi seqids
+# 内容示例：
+# md1,md2,md3,md4,md5,md6,md7
+# at1,at2,at3,at4,at5
+
+vi layout
+# 复制以下模板：
+# y, xstart, xend, rotation, color, label, va,  bed
+ .6,     .1,    .8,       0,      , Apple, top, Md.bed
+ .4,     .1,    .8,       0,      , Arabidopsis, top, At.bed
+# 连线部分
+e, 0, 1, Md.At.anchors.simple
+
+python -m jcvi.graphics.synteny Md.At.pdf seqids layout
+```
 
 
 
