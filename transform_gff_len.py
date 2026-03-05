@@ -23,6 +23,8 @@ data[3] = data[3].astype('int')
 for name, group in data.groupby([0]):
     group = group.sort_values(by=[2])
     data.loc[group.index, 'order'] = list(range(1, len(group) + 1))
+
+data['id'] = data['id'] + '.1'
 data = data[[0,'id',3,4,6,'order',8]]
 
 data = data.sort_values(by=[0, 'order'])
