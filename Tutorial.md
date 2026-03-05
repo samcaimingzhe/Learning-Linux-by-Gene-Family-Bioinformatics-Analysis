@@ -747,6 +747,16 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 ```
 如果有任何报错就换几个环境，可能与python版本有关系。
 
+# 顺式作用元件分析
+这个必须得上网站做了，在[PlantCARE](https://bioinformatics.psb.ugent.be/webtools/plantcare/html/)。需要使用邮箱，最后过几分钟会发送到邮箱里。
+但在此之前，我们需要提取这些基因的启动子区域，也就是基因可编码区的上游2000bp。需要用到的软件是`bedtools`：
+```bash
+
+```
+
+
+
+
 # 共线性分析
 最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=2.7`：
 ```bash
@@ -766,33 +776,15 @@ for gff_file in annotations/*.gff3;
 do
     base=$(basename "$gff_file")
     prefix=${base%.gff3}
-
     echo "Processing: $prefix ..."
-
-    seqkit faidx chromosomes/${prefix}.chr
-
-    grep '\tmRNA\t' "$gff_file" | awk 'BEGIN{OFS="\t"} {
-        gsub(/.*ID=/, "", $9); 
-        gsub(/;.*/, "", $9); 
-        print $1, $9, $4, $5
-    }' > "wgdi/${prefix}.wgdi.gff"
-
+    python3 transform_gff_len.py annotations/$prefix.gff3 wgdi/$prefix.wgdi.gff wgdi/$prefix.len
+    # python3 transform_gff_len.py annotations/ath.gff3 wgdi/ath.wgdi.gff wgdi/ath.len
 done
-
-mv chromosomes/*.chr.fai wgdi/
-
 echo "All done! gff files are ready."
 ```
-
 检查一下提取情况：
 ```bash
-for fai_file in wgdi/*.chr.fai;
-do
-    base=$(basename "$fai_file")
-    prefix=${base%.chr.fai}
-    echo ">>> $prefix"
-    cat $fai_file
-done
+
 ```
 可见染色体的命名是非常非常奇怪的，而且有一些文件没有组装成染色体级别。这个我忘记检查了哈哈哈。不过没关系我们这里是教程。而且刚刚我们已经写好前面的脚本，我们现在预测其他基因组的GALT非常简单了，改一下脚本里的文件名和下载链接就好。然后我们现在就暂时不用这些未组装好的染色体了。
 ```bash
@@ -827,23 +819,49 @@ sed '/ptg/d' wgdi/cs.chr.fai1 > wgdi/cs.chr.fai
 
 cut -f 1 wgdi/*.wgdi.gff | uniq
 
-for fai_file in wgdi/*.chr.fai;
-do
-    base=$(basename "$fai_file")
-    prefix=${base%.chr.fai}
-    echo ">>> $prefix"
-    cat $fai_file
-done
 ```
 
 
+```bash
+[collinearity]
+gff1 = wgdi/md.wgdi.gff
+gff2 = wgdi/md.wgdi.gff
+lens1 = wgdi/md.len
+lens2 = wgdi/md.len
+blast = md.md.blastp
+blast_reverse = false
+comparison = genomes
+multiple  = 1
+process = 8
+evalue = 1e-5
+score = 100
+grading = 50,30,25
+mg = 25,25
+pvalue = 1
+repeat_number = 20
+positon = order
+savefile = md.md.col
 
+[blockinfo]
+gff1 = md.wgdi.gff
+gff2 = md.wgdi.gff
+lens1 = md.len
+lens2 = md.len
+blast = md.md.blastp
+collinearity = md.md.col
+score = 100
+evalue = 1e-5
+repeat_number = 10
+position = order
+ks = ks.txt
+ks_col = ks_NG86
+savefile = block.csv
 
-
-
+wgdi -icl total.conf
+```
 
 ```bash
-
+blastp -num_threads 50 -db databases/md -query proteins/md.all.pe -outfmt 6 -evalue 1e-5 -num_alignments 20  -out md.md.blastp
 ```
 
 
