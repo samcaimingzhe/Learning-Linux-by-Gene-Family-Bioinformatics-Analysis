@@ -3,7 +3,7 @@
 import sys
 import pandas as pd
 
-data = pd.read_csv(sys.argv[1], sep="\t", header=None)
+data = pd.read_csv(sys.argv[1], sep="\t", header=None, comment='#')
 data = data[data[2] == 'mRNA']
 
 data['id'] = data[8].str.split(';').str[0].str.replace('ID=', '', regex=False).str.split('.').str[0]
