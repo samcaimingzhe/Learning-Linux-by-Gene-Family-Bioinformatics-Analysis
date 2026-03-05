@@ -748,10 +748,10 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 如果有任何报错就换几个环境，可能与python版本有关系。
 
 # 共线性分析
-最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=3.5`：
+最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=2.7`：
 ```bash
-conda create -n py3.5 python=3.5 -y
-conda activate py3.5
+conda create -n py2.7 python=2.7 -y
+conda activate py2.7
 conda install -c bioconda last emboss gffread -y
 conda install -c bioconda jcvi -y
 ```
