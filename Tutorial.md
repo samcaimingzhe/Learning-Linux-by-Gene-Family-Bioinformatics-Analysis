@@ -758,63 +758,92 @@ conda install -c bioconda jcvi -y
 conda install last -y
 ```
 假设我们只需要处理苹果的文件，我们首先需要把苹果的`gff3`转化为`bed`，比如`python3 -m jcvi.formats.gff bed annotations/md.gff -o beds/md.bed`:
+
 ```bash
-mkdir beds cds
+mkdir wgdi
 
 for gff_file in annotations/*.gff3;
 do
-    filename=$(basename "$gff_file")
-    prefix="${filename%%.*}"
-    echo "Processing species: $prefix"
-    echo "Input: $gff_file"
+    base=$(basename "$gff_file")
+    prefix=${base%.gff3}
 
-    python -m jcvi.formats.gff bed --type=mRNA "$gff_file" -o "beds/$prefix.bed"
-    gffread "$gff_file" -g "chromosomes/$prefix.chr" -x "cds/$prefix.cds"
+    echo "Processing: $prefix ..."
 
-    echo "Successfully created: $prefix.bed & $prefix.cds"
+    seqkit faidx chromosomes/${prefix}.chr
+
+    grep '\tmRNA\t' "$gff_file" | awk 'BEGIN{OFS="\t"} {
+        gsub(/.*ID=/, "", $9); 
+        gsub(/;.*/, "", $9); 
+        print $1, $9, $4, $5
+    }' > "wgdi/${prefix}.wgdi.gff"
+
 done
-echo "All done! BED & CDS files are ready."
+
+mv chromosomes/*.chr.fai wgdi/
+
+echo "All done! gff files are ready."
 ```
+
 检查一下提取情况：
 ```bash
-head cds/*.cds
-head beds/*.bed
-```
-```bash
-mkdir cdsbed
-cp cds/*.cds beds/*.bed cdsbed
-cd cdsbed
-
-for cds_file in *.cds;
+for fai_file in wgdi/*.chr.fai;
 do
-    filename=$(basename "$cds_file")
-    prefix="${filename%%.*}"
-
-    python -m jcvi.compara.catalog ortholog --no_strip_names --cscore=.99 md $prefix
-    python -m jcvi.compara.synteny screen --minspan=30 --dist=100 md.$prefix.anchors md.$prefix.anchors.simple
-
-    echo "Successfully created: md.vs.$prefix"
+    base=$(basename "$fai_file")
+    prefix=${base%.chr.fai}
+    echo ">>> $prefix"
+    cat $fai_file
 done
-echo "All done! ANCHORS files are ready."
+```
+可见染色体的命名是非常非常奇怪的，而且有一些文件没有组装成染色体级别。这个我忘记检查了哈哈哈。不过没关系我们这里是教程。而且刚刚我们已经写好前面的脚本，我们现在预测其他基因组的GALT非常简单了，改一下脚本里的文件名和下载链接就好。然后我们现在就暂时不用这些未组装好的染色体了。
+```bash
+rm wgdi/pb*
+
+cut -f 1 wgdi/ath.wgdi.gff | uniq
+mv wgdi/ath.wgdi.gff wgdi/ath.wgdi.gff1
+sed '/Mt/d' wgdi/ath.wgdi.gff1 | sed '/Pt/d' > wgdi/ath.wgdi.gff
+mv wgdi/ath.chr.fai wgdi/ath.chr.fai1
+sed '/Mt/d' wgdi/ath.chr.fai1 | sed '/Pt/d' > wgdi/ath.chr.fai
+
+cut -f 1 wgdi/md.wgdi.gff | uniq
+mv wgdi/md.wgdi.gff wgdi/md.wgdi.gff1
+sed '/Un/d' wgdi/md.wgdi.gff1 > wgdi/md.wgdi.gff
+mv wgdi/md.chr.fai wgdi/md.chr.fai1
+sed '/Un/d' wgdi/md.chr.fai1 > wgdi/md.chr.fai
+
+cut -f 1 wgdi/pp.wgdi.gff | uniq
+mv wgdi/pp.wgdi.gff wgdi/pp.wgdi.gff1
+sed '/c000/d' wgdi/pp.wgdi.gff1 > wgdi/pp.wgdi.gff
+mv wgdi/pp.chr.fai wgdi/pp.chr.fai1
+sed '/c000/d' wgdi/pp.chr.fai1 > wgdi/pp.chr.fai
+
+cut -f 1 wgdi/fv.wgdi.gff | uniq
+cut -f 1 wgdi/sl.wgdi.gff | uniq
+
+cut -f 1 wgdi/cs.wgdi.gff | uniq
+mv wgdi/cs.wgdi.gff wgdi/cs.wgdi.gff1
+sed '/ptg/d' wgdi/cs.wgdi.gff1 > wgdi/cs.wgdi.gff
+mv wgdi/cs.chr.fai wgdi/cs.chr.fai1
+sed '/ptg/d' wgdi/cs.chr.fai1 > wgdi/cs.chr.fai
+
+cut -f 1 wgdi/*.wgdi.gff | uniq
+
+for fai_file in wgdi/*.chr.fai;
+do
+    base=$(basename "$fai_file")
+    prefix=${base%.chr.fai}
+    echo ">>> $prefix"
+    cat $fai_file
+done
 ```
 
+
+
+
+
+
+
 ```bash
-# 创建一个文本文件叫 seqids
-# 第一行是 Md 的染色体，第二行是 At 的染色体
-vi seqids
-# 内容示例：
-# md1,md2,md3,md4,md5,md6,md7
-# at1,at2,at3,at4,at5
 
-vi layout
-# 复制以下模板：
-# y, xstart, xend, rotation, color, label, va,  bed
- .6,     .1,    .8,       0,      , Apple, top, Md.bed
- .4,     .1,    .8,       0,      , Arabidopsis, top, At.bed
-# 连线部分
-e, 0, 1, Md.At.anchors.simple
-
-python -m jcvi.graphics.synteny Md.At.pdf seqids layout
 ```
 
 
