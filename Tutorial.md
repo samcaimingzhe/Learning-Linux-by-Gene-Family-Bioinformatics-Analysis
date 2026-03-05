@@ -752,7 +752,7 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 ```bash
 conda create -n py2.7 python=2.7 -y
 conda activate py2.7
-conda install -c bioconda last emboss gffread -y
+conda install -c bioconda last emboss gffread "decorator<5.0.0" -y
 conda install -c bioconda jcvi -y
 ```
 假设我们只需要处理苹果的文件，我们首先需要把苹果的`gff3`转化为`bed`，比如`python3 -m jcvi.formats.gff bed annotations/md.gff -o beds/md.bed`:
