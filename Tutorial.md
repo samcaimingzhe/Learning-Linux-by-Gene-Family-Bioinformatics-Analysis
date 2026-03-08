@@ -749,11 +749,17 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 
 # 顺式作用元件分析
 这个必须得上网站做了，在[PlantCARE](https://bioinformatics.psb.ugent.be/webtools/plantcare/html/)。需要使用邮箱，最后过几分钟会发送到邮箱里。
-但在此之前，我们需要提取这些基因的启动子区域，也就是基因可编码区的上游2000bp。需要用到的软件是`bedtools`：
+但在此之前，我们需要提取这些基因的启动子区域，也就是基因可编码区的上游2000bp。需要用到的软件是`seqkit`：
+```bash
+mkdir -p promoter
+seqkit grep --pattern "mRNA" annotations/md.gff3 | \
+seqkit subseq --gtf annotations/md.gff3 --up-stream 2000 --only-flank chromosomes/md.chr > promoter/md.promoters.fa
+seqkit grep -f result/md.final.id promoter/md.promoters.fa  -o promoter/md.galt.promoters.fa
+```
+给我们获得压缩包后：
 ```bash
 
 ```
-
 
 
 
