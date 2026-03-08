@@ -115,7 +115,7 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 假设你的导师给你安排了《苹果半乳糖基转移酶基因家族分析》这个本科毕业论文的题目。我们需要通过：
 - 拟南芥半乳糖基转移酶基因家族的蛋白质序列：TAIR或者Uniprot
 - 半乳糖基转移酶基因家族的pfam号：论文里找，你会找到 _PF01762_
-- 苹果的蛋白质序列文件：在GDR中
+- 苹果的蛋白质序列文件：在GDR中可选择的比较多
 - 半乳糖基转移酶的英文名：_Galactosyltransferase_
 
 ## 如何找到基因家族的pfam号
@@ -140,9 +140,7 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 cd ~/Desktop
 mkdir GeneFamilyAnalysis
 cd GeneFamilyAnalysis
-mkdir LearnIdentification
-cd LearnIdentification
-mv ~/Downloads/PF01762.hmm.gz ~/Desktop/GeneFamilyAnalysis/LearnIdentification
+mv ~/Downloads/PF01762.hmm.gz ./
 gzip -d PF01762.hmm.gz
 ```
 - `cd`：change directory，我们想到达哪个文件夹就需要对应的路径。
@@ -150,7 +148,7 @@ gzip -d PF01762.hmm.gz
 - `mv`：move，把文件移动到其他路径。
 - `gzip`：压缩文件为gz压缩包的工具，-d是使用解压功能，这会把PF01762.hmm.gz解压为PF01762.hmm。
 
-如果你想知道我们目前在哪个文件夹可以使用`pwd`，意思是print working directory。如果在打开终端后输入就会得到`/Users/YourUserName`，这里YourUserName就是你电脑的名字，一般 Macbook 就是你自己的名字，是你一开始在电脑里设定好的，Linux会是`/home`，Windows的WSL也是`/home`。我们可以用`~/`代替。这也就是为什么我们一开始`cd ~/Desktop`。
+如果你想知道我们目前在哪个文件夹可以使用`pwd`，意思是`print working directory`。如果在打开终端后输入就会得到`/Users/YourUserName`，这里`<YourUserName>`就是你电脑的名字，一般 Macbook 就是你自己的名字，是你一开始在电脑里设定好的，Linux会是`/home`，Windows的WSL也是`/home`。`/Users/YourUserName`可以用`~/`代替。这也就是为什么我们一开始`cd ~/Desktop`。
 
 ## 如何找到参考物种此基因家族的蛋白质序列
 我们优先使用Uniprot，输入我们的基因家族名称，然后勾选Status中Reviewed (Swiss-Prot)与Popular Organism的A.thaliana。选择第一个蛋白质[Q8L7F9](https://www.uniprot.org/uniprotkb/Q8L7F9/entry)
@@ -325,8 +323,8 @@ wget https://repo.anaconda.com/archive/Anaconda3-2025.12-2-MacOSX-arm64.sh
 bash Anaconda3-2025.12-2-MacOSX-arm64.sh
 ```
 - anaconda有880.9M，请耐心等待
-- wget是下载
-- bash是运行以.sh为后缀的shell脚本
+- `wget`是下载
+- `bash`是运行以`.sh`为后缀的`shell脚本`
 运行后你会看见：
 ```bash
 Welcome to Anaconda3 2025.12-2
@@ -336,7 +334,7 @@ agreement.
 Please, press ENTER to continue
 >>> 
 ```
-长按Enter回车键（一般按两下也可以）直到：
+长按`Enter`回车键（一般按两下也可以）直到：
 ```bash
 Do you accept the license terms? [yes|no]
 >>> 
@@ -353,10 +351,10 @@ Anaconda3 will now be installed into this location:
 ```
 这里一般情况下是长按Enter即可，但是你也可以选择安装到其他地址，比如我就会安装到移动硬盘里`/Volumes/MyPSD/anaconda3`。
 
-然后我们才正式进入到安装环节，自此我们把Anaconda3简称为conda。首先我们需要了解一个概念叫**环节配置**，我们经常会看到别人说配环境。如何通俗的理解？
-环境的全称是“虚拟环境”，我们可以创建一个新环境，同时规定好python版本。我们可能同一道分析使用到的软件依赖于不同版本的python，有的是python3有的是python2，使用我们就需要一个python3的虚拟环境和一个python2的虚拟环境。环境像是软件运行必须的氛围，如果把人比作软件，环境就像是图书馆和操场，有人在操场才可以学习（我知道这个例子很奇葩），有人在图书馆才能学习。环境就是软件运行的条件。
+然后我们才正式进入到安装环节，自此我们把Anaconda3简称为`conda`。首先我们需要了解一个概念叫**环节配置**，我们经常会看到别人说配环境。如何通俗的理解？
+环境的全称是“虚拟环境”，我们可以创建一个新环境，同时规定好`python`版本。我们可能同一道分析使用到的软件依赖于不同版本的`python`，有的是`python3`有的是`python2`，使用我们就需要一个`python3`的虚拟环境和一个python2的虚拟环境。环境像是软件运行必须的氛围，如果把人比作软件，环境就像是图书馆和操场，有人在操场才可以学习（我知道这个例子很奇葩），有人在图书馆才能学习。环境就是软件运行的条件。
 
-我们可以这样子配置环境并激活与关闭环境：    （请一行一行复制，我的意思是不要点右边这个一键复制的按钮哦!）
+我们可以这样子配置环境并激活与关闭环境：（请一行一行复制，我的意思是不要点右边这个一键复制的按钮哦!）
 ```bash
 conda create -n env1 python=3.9
 conda activate env1
@@ -364,10 +362,10 @@ conda deactivte env1
 ```
 - `create`是创建虚拟环境的指令
 - `-n`是命名为，`env1`是环境名称，可以修改成别的
-- `python=3.9`设定python版本为3.9（可以不加，就会使用默认的python版本），我当时默认是安装3.13.2
+- `python=3.9`设定`python`版本为3.9（可以不加，就会使用默认的`python`版本），我当时默认是安装`3.13.2`
 - `activate`是激活，`deactivate`是关闭
 
-后期我们可能会用的一些软件是需要 Intel (x86) 版本的 Python 环境，我们可以创建一个：
+后期我们可能会用的一些软件是需要 `Intel (x86)` 版本的 `Python` 环境，我们可以创建一个：
 ```bash
 CONDA_SUBDIR=osx-64 conda create -n x86env
 conda activate x86env
@@ -391,7 +389,7 @@ tar -zxvf ncbi-blast-2.17.0+-aarch64-macosx.tar.gz
 cd /ncbi-blast-2.17.0+/bin
 ```
 进入`bin`我们就会发现需要的软件都在里面比如`blastn`、`blastp`、`blastx`、`tblastn`等等。
-blast全称 Basic Local Alignment Search Tool，翻译为基本局部比对搜索工具，其功能是寻找从两个序列中找到最大的相似片段，它会用目标序列和数据库中的序列一一比对，按照参数过滤出最相似的一批序列。所以这些工具都是blast，他们的功能可以简单解释为：
+`blast`全称 Basic Local Alignment Search Tool，翻译为基本局部比对搜索工具，其功能是寻找从两个序列中找到最大的相似片段，它会用目标序列和数据库中的序列一一比对，按照参数过滤出最相似的一批序列。所以这些工具都是`blast`，他们的功能可以简单解释为：
 - `blastn`：用核苷酸比对核苷酸库
 - `blastp`：用蛋白质比对蛋白质库
 - `blastx`：核苷酸翻译为蛋白质，再用蛋白质比对蛋白质库
@@ -739,8 +737,7 @@ Rscript cd_motif_gene_2.0.R
 
 **很遗憾**在Linux中我没有找到很好用的软件，所以我自己写了一个python脚本：
 ```bash
-cd ../..
-weget 
+cd ../.. #能回到identification目录下就好
 pip install BIO
 wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/prot_analyzer.py
 python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
