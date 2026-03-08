@@ -867,6 +867,11 @@ wgdi -icl total.conf
 blastp -num_threads 50 -db databases/md -query proteins/md.all.pe -outfmt 6 -evalue 1e-5 -num_alignments 20  -out md.md.blastp
 ```
 
+#参考文献
+最后的最后，我们需要去饮用这些工具的论文：
+PlantCARE: a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences. Lescot, M., Déhais, P., Moreau, Y., De Moor, B., Rouzé ,P.,and Rombauts, S. Nucleic Acids Res., Database issue(2002), 30(1):325-327.
+Sun P., Jiao B., Yang Y., Shan L., Li T., Li X., Xi Z., Wang X., and Liu J. (2022). WGDI: A user-friendly toolkit for evolutionary analyses of whole-genome duplications and ancestral karyotypes. Mol. Plant.
+
 
 
 
