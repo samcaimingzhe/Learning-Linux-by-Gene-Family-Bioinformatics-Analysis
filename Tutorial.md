@@ -3,7 +3,7 @@
 
 > 本教程适用于想要学习Linux入门生物信息学的研0学子们。
 > 
-> 你是一个即将毕业的大四农科生，莫名其妙被老师安排做一个生物信息学毕设，题目好像是什么东西的基因家族生物信息学分析。你不懂什么是生物信息学分析，你很想接触了解一下，但不知道从何开始。看这一篇教程足矣。
+> 你是一个即将毕业的大四农科生or生科人or...（我懂这种suffer的感觉），莫名其妙被毕设导师安排做一个生物信息学论文（我当年是主动要求的，不过感觉被动的人很多呢），题目好像是《???作物的基因家族生物信息学分析与表达模式分析》。你不懂什么是生物信息学，你很想接触了解一下，但不知道从何开始。那么我们这篇教程就是为此而创作的。
 > 
 > 你毕业论文就是找到别人已经鉴定出来的一批蛋白质，这一批蛋白质具有很大的相似性，而这种相似性不只存在于这个物种，是在整个植物界乃至整个生物界可能都非常相似。所以你要去找到这一批蛋白的序列是什么，并且像《灰姑娘》中的王子一样拿着水晶鞋（参考物种的基因家族蛋白）去找整个城市的人（你需要做的物种的基因组的全部蛋白）一个一个试鞋（分析），最终找到你的灰姑娘（你需要做的物种的基因家族蛋白）。一开始大概做的是这么一件事情，之后就是对你找到蛋白质进行一些流程化的分析，得到一个规范化的结论。最后还有可能需要做一个qPCR验证这个基因家族蛋白的表达模式会受到胁迫或者激素的调控，也就是有一部分湿实验。
 > 
@@ -138,13 +138,13 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 
 ```bash
 cd ~/Desktop
-mkdir GeneFamilyAnalysis
+mkdir -p GeneFamilyAnalysis
 cd GeneFamilyAnalysis
 mv ~/Downloads/PF01762.hmm.gz ./
 gzip -d PF01762.hmm.gz
 ```
 - `cd`：change directory，我们想到达哪个文件夹就需要对应的路径。
-- `mkdir`：make directory，新建一个文件夹。
+- `mkdir`：make directory，新建一个文件夹，一般直接`mkdir <文件夹>`即可，`-p`可以在文件夹存在的情况不报错。
 - `mv`：move，把文件移动到其他路径。
 - `gzip`：压缩文件为gz压缩包的工具，-d是使用解压功能，这会把PF01762.hmm.gz解压为PF01762.hmm。
 
@@ -521,7 +521,7 @@ bash extract_family_proteins.sh
 ## 多序列比对
 ```bash
 conda install -c bioconda clustalw
-mkdir phylogeny
+mkdir -p phylogeny
 cp result/Merged.galt.simplified.pep phylogeny
 cd phylogeny
 ```
@@ -656,13 +656,15 @@ clustalw
 我们继续新建一个新的文件夹，把不同分析的文件放在不同路径管理，我会带着大家慢慢养成这个好习惯的：
 ```bash
 cd ..
-mkdir motif_cd_gene
+mkdir -p motif_cd_gene
 cp phylogeny/renamed.galt.simplified.pep motif_cd_gene
 cd  motif_cd_gene/
-
+```
+## Motif
+安装meme的时候可能会报错，因为大部分可安装的`meme`需要`python=2.7`，只需要`conda create -n py2.7 python=2.7`，然后在新环境里安装`meme`即可。
+```bash
 conda install -c bioconda meme
 ```
-安装meme的时候可能会报错，因为大部分可安装的`meme`需要`python=2.7`，只需要`conda create -n py2.7 python=2.7`，然后在新环境里安装`meme`即可。
 可以本地跑也可以选择[网站](https://meme-suite.org/meme/tools/meme)跑，并下载meme.xml文件。之后我们获得的一些用于做图的文件都要保存到新文件夹`plot`中。本地跑会自动生成一个`meme_out`的文件夹，结果都储存在里面。此外我们还需要跑一次进化树，但这一次我们之跑`Md.GALT.pep`:
 ```bash
 grep 'MdGALT' renamed.galt.simplified.pep | sed 's/>//' > Md.renamed.galt.id
@@ -671,13 +673,15 @@ meme Md.renamed.galt.pep -protein -nmotifs 10
 mkdir plot
 mv meme_out/meme.xml Md.renamed.galt.pep plot/
 ```
+## 保守结构域
 之前在Batch CD-Search做了保守结构域预测，但是当时我们的序列ID还是原始的，现在已经修改完了，所以我们继续可以在上传一次`Md.renamed.galt.pep`来获取`hitdata.txt`
 ```bash
 wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/hitdata.txt
 mv hitdata.txt plot/
 grep '>' plot/hitdata.txt | awk '{print $3 "\t" $6 "\t" $7 "\t" $11}' | sed 's/>//' > cd.info
 ```
-最后就是获取基因结构，这个少许需要大家的注意：
+## 基因结构
+最后就是获取基因结构，这个稍微需要大家的注意：
 ```bash
 grep 'ANT' ../phylogeny/Merged.galt.simplified.3.pep | sed 's/>//' > Md.oldname.galt.id
 cp ../annotations/md.gff3 ./
@@ -686,13 +690,15 @@ grep 'mRNA' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.mrna.p
 grep 'CDS' Md.galt.loc.info | awk '{print $3 "\t" $4 "\t" $5}' > Md.galt.cds.pos
 cp ../phylogeny/rename.id *.pos plot/
 ```
+## 苹果小进化树
 然后记得`clustalw`处理一下`Md.renamed.galt.pep`。
 ```bash
 mv Md.renamed.galt.pep plot/
 cd plot/
 clustalw
 ```
-接下来我们就需要使用到R语言了。不会R语言？没事，我们一起学:
+## R语言构建漂亮结构图
+接下来我们就需要使用到R语言了。**不会R语言？没事，我们一起学:**
 我们需要安装R语言与Rstudio两个东西，Rstudio像是容器，R语言是灵魂。R语言本身可以单独使用，但是在Rstudio的加持下会使我们的编程变得赏心悦目。
 我们采用R语言清华镜像源[MacOSX](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/macosx/)、[Windows](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/windows/)、[Linux](https://mirrors.tuna.tsinghua.edu.cn/CRAN/bin/linux/)。选择合适你的下载即可。然后来[下载Rstudio](https://posit.co/downloads/)。先运行R语言的安装包，再运行Rstudio的安装包。最后我们使用的是Rstudio。
 
@@ -737,7 +743,7 @@ Rscript cd_motif_gene_2.0.R
 
 **很遗憾**在Linux中我没有找到很好用的软件，所以我自己写了一个python脚本：
 ```bash
-cd ../.. #能回到identification目录下就好
+cd ../.. #能回到GeneFamilyAnalysis目录下就好
 pip install BIO
 wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/prot_analyzer.py
 python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
@@ -867,10 +873,18 @@ wgdi -icl total.conf
 blastp -num_threads 50 -db databases/md -query proteins/md.all.pe -outfmt 6 -evalue 1e-5 -num_alignments 20  -out md.md.blastp
 ```
 
-#参考文献
-最后的最后，我们需要去饮用这些工具的论文：
-PlantCARE: a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences. Lescot, M., Déhais, P., Moreau, Y., De Moor, B., Rouzé ,P.,and Rombauts, S. Nucleic Acids Res., Database issue(2002), 30(1):325-327.
-Sun P., Jiao B., Yang Y., Shan L., Li T., Li X., Xi Z., Wang X., and Liu J. (2022). WGDI: A user-friendly toolkit for evolutionary analyses of whole-genome duplications and ancestral karyotypes. Mol. Plant.
+# 参考文献
+
+最后的最后，我们需要去引用这些工具的论文（每个大学的都有每个大学的格式，这里直接给大家PubMed的默认格式）：
+
+- Altschul SF, Gish W, Miller W, Myers EW, Lipman DJ. Basic local alignment search tool. J Mol Biol. 1990 Oct 5;215(3):403-10. doi: 10.1016/S0022-2836(05)80360-2. PMID: 2231712.
+- Eddy SR. Accelerated Profile HMM Searches. PLoS Comput Biol. 2011 Oct;7(10):e1002195. doi: 10.1371/journal.pcbi.1002195. Epub 2011 Oct 20. PMID: 22039361; PMCID: PMC3197634.
+- Thompson JD, Higgins DG, Gibson TJ. CLUSTAL W: improving the sensitivity of progressive multiple sequence alignment through sequence weighting, position-specific gap penalties and weight matrix choice. Nucleic Acids Res. 1994 Nov 11;22(22):4673-80. doi: 10.1093/nar/22.22.4673. PMID: 7984417; PMCID: PMC308517.
+- Letunic I, Bork P. Interactive Tree of Life (iTOL) v6: recent updates to the phylogenetic tree display and annotation tool. Nucleic Acids Res. 2024 Jul 5;52(W1):W78-W82. doi: 10.1093/nar/gkae268. PMID: 38613393; PMCID: PMC11223838.
+- Lescot M, Déhais P, Thijs G, Marchal K, Moreau Y, Van de Peer Y, Rouzé P, Rombauts S. PlantCARE, a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences. Nucleic Acids Res. 2002 Jan 1;30(1):325-7. doi: 10.1093/nar/30.1.325. PMID: 11752327; PMCID: PMC99092.
+- Sun P, Jiao B, Yang Y, Shan L, Li T, Li X, Xi Z, Wang X, Liu J. WGDI: A user-friendly toolkit for evolutionary analyses of whole-genome duplications and ancestral karyotypes. Mol Plant. 2022 Dec 5;15(12):1841-1851. doi: 10.1016/j.molp.2022.10.018. Epub 2022 Oct 28. PMID: 36307977.
+
+
 
 
 
