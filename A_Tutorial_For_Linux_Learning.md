@@ -764,7 +764,54 @@ seqkit grep -f result/md.final.id promoter/md.promoters.fa  -o promoter/md.galt.
 
 ```
 
+# RNA-seq转录组分析
+一般来讲需要课题组自己对作物进行各种处理，不管是基因敲除还是化学处理，这些处理都会对基因的转录产生影响，所以转录组数据都是由课题组提供的，一般是一个Excel表格，里面会有控制组和不同处理组的表达数据。可以用R语言非常非常迅速得到一个热图。这里我们找一篇论文里的数据来做示范：
+- Hadish JA, Hargarten HL, Zhang H, Mattheis JP, Honaas LA, Ficklin SP. Towards identification of postharvest fruit quality transcriptomic markers in Malus domestica. PLoS One. 2024 Mar 6;19(3):e0297015. doi: 10.1371/journal.pone.0297015. Erratum in: PLoS One. 2024 Jun 21;19(6):e0306187. doi: 10.1371/journal.pone.0306187. PMID: 38446822; PMCID: PMC10917293.
+在论文中2.4节我们会读到“The ‘Golden Delicious’ doubled-haploid genome (GDDH13) [38] was downloaded from the Genome Database for Rosaceae (GDR) [39] and used for alignment. ”，这就说明他们用的是GDR数据库中GDDH13这个基因组，我们也可以下载到。所以你想到用什么办法把我们的基因名转化成GDDH13的基因名了吗？
 
+我们就要用`blastp`：
+```bash
+wget https://www.rosaceae.org/rosaceae_downloads/Malus_x_domestica/Malus_x_domestica-genome_GDDH13_v1.1/genes/GDDH13_1-1_prot.fasta.gz
+gzip -d GDDH13_1-1_prot.fasta.gz
+
+mkdir -p GDDH13
+mv GDDH13_1-1_prot.fasta GDDH13/
+makeblastdb -in GDDH13/GDDH13_1-1_prot.fasta -input_type fasta -parse_seqids -dbtype prot -out GDDH13/GDDH13
+blastp -task blastp -db GDDH13/GDDH13 -query phylogeny/Md.renamed.galt.pep -evalue 10 -outfmt 6 -out GDDH13/blast.res
+awk '$3 >= 100' GDDH13/blast.res|sort|wc -l
+```
+我们只能找到16个完全匹配的基因，所以我们可以把score降低一点点看看；
+```bash
+awk '$3 >= 99' GDDH13/blast.res|sort|wc -l # 27
+awk '$3 >= 97' GDDH13/blast.res|sort|wc -l # 31
+awk '$3 >= 97' GDDH13/blast.res|sort > GDDH13/md2md.ids.txt
+```
+我们可以打开`md2md.ids`仔细筛选出合适的ID，大部分都是100分，也就是完全匹配上，也有一些只能匹配到96-97分也是非常不错的。这基本上就是我们想要借用其他论文转录组数据进行分析的时候需要使用的技术了。
+
+```bash
+wget https://doi.org/10.1371/journal.pone.0297015.s001
+unzip journal.pone.0297015.s001
+```
+在解压后的`Supplemental_File_1`文件夹里有raw和tpm的数据，一般选择tpm直接出图。fkpm和tpm在我们这个课题没有什么区别，都可以使用。然后我们用R语言出图：
+```R
+tpm = read.csv('Supplemental_File_1/GEM.GEM.TPM.txt',sep = '\t', header = T)
+id = read.csv('GDDH13/md2md.ids.txt',sep = '\t', header = F)
+names(id) = c('ID','GD_ID')
+tpm$GD_ID = row.names(tpm)
+id2tpm = merge(id, tpm, by='GD_ID')
+
+library(ggplot2)
+library(reshape2)
+data <- melt(id2tpm)
+
+ggplot(data, aes(x = variable, y = ID, fill = value)) +
+  geom_tile() +
+  theme(axis.text.x = element_blank())+
+  scale_fill_gradient(low = "white", high = "red") 
+```
+我们根据做出来的图会发现，并不是所有基因都会维持很高的表达，有很多白色的部分，说明他们都是没有怎么表达，但也有很多红色的部分，说明他们表达量挺高。那我们关注这些红色明显的基因，又会发现他们的表达模式各有不同，就会有发现他们在同样的样本里头，有的非常高有的非常低。关于样本具体是什么，我没有仔细去看文章里怎么写的，他们可能是发育的不同时间，也可能是对样本不同的化学处理。
+
+总而言之，这一份 RNA-Seq 的样本太多了。平常我们很少会处理到这么多的样本，所以会看到这些格子它都是很高很瘦。一般我们可能处理的样本也就 5-10 个，所以这个里头的样本似乎有 30 多个，就会让这个图的每个格子看起来特别瘦高瘦高的。不管怎样，这就是一个我们非常简单处理 RNA-Seq 的方式，应该算是整个流程中比较简单的部分了，但是它的重点在于如何去解释，所以其实难点在写论文。
 
 # 共线性分析
 最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=2.7`：
