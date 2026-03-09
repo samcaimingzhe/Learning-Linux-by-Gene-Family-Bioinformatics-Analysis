@@ -767,6 +767,7 @@ seqkit grep -f result/md.final.id promoter/md.promoters.fa  -o promoter/md.galt.
 # RNA-seq转录组分析
 一般来讲需要课题组自己对作物进行各种处理，不管是基因敲除还是化学处理，这些处理都会对基因的转录产生影响，所以转录组数据都是由课题组提供的，一般是一个Excel表格，里面会有控制组和不同处理组的表达数据。可以用R语言非常非常迅速得到一个热图。这里我们找一篇论文里的数据来做示范：
 - Hadish JA, Hargarten HL, Zhang H, Mattheis JP, Honaas LA, Ficklin SP. Towards identification of postharvest fruit quality transcriptomic markers in Malus domestica. PLoS One. 2024 Mar 6;19(3):e0297015. doi: 10.1371/journal.pone.0297015. Erratum in: PLoS One. 2024 Jun 21;19(6):e0306187. doi: 10.1371/journal.pone.0306187. PMID: 38446822; PMCID: PMC10917293.
+
 在论文中2.4节我们会读到“The ‘Golden Delicious’ doubled-haploid genome (GDDH13) [38] was downloaded from the Genome Database for Rosaceae (GDR) [39] and used for alignment. ”，这就说明他们用的是GDR数据库中GDDH13这个基因组，我们也可以下载到。所以你想到用什么办法把我们的基因名转化成GDDH13的基因名了吗？
 
 我们就要用`blastp`：
