@@ -13,13 +13,14 @@
 我们会在这一起学到：
 - 如何找到合适的文件与数据库
 - 在Linux中如何下载并安装软件
-- 基因家族候选蛋白的鉴定
-- 基因家族蛋白与基因的结构分析
-- 基因家族蛋白理化性质分析
-- 基因家族共线性分析（还没写完）
-- 基因家族顺式作用元件分析（还没写完）
+- 候选蛋白的鉴定
+- 蛋白与基因的结构分析
+- 蛋白理化性质分析
+- 蛋白亚细胞定位
+- 共线性分析（还没写完）
+- 顺式作用元件分析（还没写完）
 - 基于RNA-seq转录组分析
-- 基因家族蛋白互作分析（没写到这）
+- 蛋白互作分析（没写到这）
 - 基于Alphafold的蛋白质3D结构预测（没写到这）
 
 # 我们来了解一下需要使用到的文件和数据库
@@ -750,8 +751,11 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 ```
 如果有任何报错就换几个环境，可能与python版本有关系。
 
-# 顺式作用元件分析
-这个必须得上网站做了，在[PlantCARE](https://bioinformatics.psb.ugent.be/webtools/plantcare/html/)。需要使用邮箱，最后过几分钟会发送到邮箱里。
+# 蛋白亚细胞定位
+在网站[DeepLoc - 2.1](https://services.healthtech.dtu.dk/services/DeepLoc-2.1/)上传蛋白质文件即可，最后会获取csv文件。可以直接用Excel打开，再选择需要的放入论文即可。
+
+# 顺式作用元件分析（最近好像PlantCARE没法用了，先跳过）
+这个必须得上网站做了，在[PlantCARE](https://bioinformatics.psb.ugent.be/webtools/plantcare/html/)（不知道这个网站目前是不是停运了）。需要使用邮箱，最后过几分钟会发送到邮箱里。
 但在此之前，我们需要提取这些基因的启动子区域，也就是基因可编码区的上游2000bp。需要用到的软件是`seqkit`：
 ```bash
 mkdir -p promoter
@@ -829,100 +833,6 @@ conda install last -y
 ```
 假设我们只需要处理苹果的文件，我们首先需要把苹果的`gff3`转化为`bed`，比如`python3 -m jcvi.formats.gff bed annotations/md.gff -o beds/md.bed`:
 
-```bash
-mkdir wgdi
-
-for gff_file in annotations/*.gff3;
-do
-    base=$(basename "$gff_file")
-    prefix=${base%.gff3}
-    echo "Processing: $prefix ..."
-    python3 transform_gff_len.py annotations/$prefix.gff3 wgdi/$prefix.wgdi.gff wgdi/$prefix.len
-    # python3 transform_gff_len.py annotations/ath.gff3 wgdi/ath.wgdi.gff wgdi/ath.len
-done
-echo "All done! gff files are ready."
-```
-检查一下提取情况：
-```bash
-
-```
-可见染色体的命名是非常非常奇怪的，而且有一些文件没有组装成染色体级别。这个我忘记检查了哈哈哈。不过没关系我们这里是教程。而且刚刚我们已经写好前面的脚本，我们现在预测其他基因组的GALT非常简单了，改一下脚本里的文件名和下载链接就好。然后我们现在就暂时不用这些未组装好的染色体了。
-```bash
-rm wgdi/pb*
-
-cut -f 1 wgdi/ath.wgdi.gff | uniq
-mv wgdi/ath.wgdi.gff wgdi/ath.wgdi.gff1
-sed '/Mt/d' wgdi/ath.wgdi.gff1 | sed '/Pt/d' > wgdi/ath.wgdi.gff
-mv wgdi/ath.chr.fai wgdi/ath.chr.fai1
-sed '/Mt/d' wgdi/ath.chr.fai1 | sed '/Pt/d' > wgdi/ath.chr.fai
-
-cut -f 1 wgdi/md.wgdi.gff | uniq
-mv wgdi/md.wgdi.gff wgdi/md.wgdi.gff1
-sed '/Un/d' wgdi/md.wgdi.gff1 > wgdi/md.wgdi.gff
-mv wgdi/md.chr.fai wgdi/md.chr.fai1
-sed '/Un/d' wgdi/md.chr.fai1 > wgdi/md.chr.fai
-
-cut -f 1 wgdi/pp.wgdi.gff | uniq
-mv wgdi/pp.wgdi.gff wgdi/pp.wgdi.gff1
-sed '/c000/d' wgdi/pp.wgdi.gff1 > wgdi/pp.wgdi.gff
-mv wgdi/pp.chr.fai wgdi/pp.chr.fai1
-sed '/c000/d' wgdi/pp.chr.fai1 > wgdi/pp.chr.fai
-
-cut -f 1 wgdi/fv.wgdi.gff | uniq
-cut -f 1 wgdi/sl.wgdi.gff | uniq
-
-cut -f 1 wgdi/cs.wgdi.gff | uniq
-mv wgdi/cs.wgdi.gff wgdi/cs.wgdi.gff1
-sed '/ptg/d' wgdi/cs.wgdi.gff1 > wgdi/cs.wgdi.gff
-mv wgdi/cs.chr.fai wgdi/cs.chr.fai1
-sed '/ptg/d' wgdi/cs.chr.fai1 > wgdi/cs.chr.fai
-
-cut -f 1 wgdi/*.wgdi.gff | uniq
-
-```
-
-
-```bash
-[collinearity]
-gff1 = wgdi/md.wgdi.gff
-gff2 = wgdi/md.wgdi.gff
-lens1 = wgdi/md.len
-lens2 = wgdi/md.len
-blast = md.md.blastp
-blast_reverse = false
-comparison = genomes
-multiple  = 1
-process = 8
-evalue = 1e-5
-score = 100
-grading = 50,30,25
-mg = 25,25
-pvalue = 1
-repeat_number = 20
-positon = order
-savefile = md.md.col
-
-[blockinfo]
-gff1 = md.wgdi.gff
-gff2 = md.wgdi.gff
-lens1 = md.len
-lens2 = md.len
-blast = md.md.blastp
-collinearity = md.md.col
-score = 100
-evalue = 1e-5
-repeat_number = 10
-position = order
-ks = ks.txt
-ks_col = ks_NG86
-savefile = block.csv
-
-wgdi -icl total.conf
-```
-
-```bash
-blastp -num_threads 50 -db databases/md -query proteins/md.all.pe -outfmt 6 -evalue 1e-5 -num_alignments 20  -out md.md.blastp
-```
 
 # 参考文献
 
@@ -933,7 +843,7 @@ blastp -num_threads 50 -db databases/md -query proteins/md.all.pe -outfmt 6 -eva
 - Thompson JD, Higgins DG, Gibson TJ. CLUSTAL W: improving the sensitivity of progressive multiple sequence alignment through sequence weighting, position-specific gap penalties and weight matrix choice. Nucleic Acids Res. 1994 Nov 11;22(22):4673-80. doi: 10.1093/nar/22.22.4673. PMID: 7984417; PMCID: PMC308517.
 - Letunic I, Bork P. Interactive Tree of Life (iTOL) v6: recent updates to the phylogenetic tree display and annotation tool. Nucleic Acids Res. 2024 Jul 5;52(W1):W78-W82. doi: 10.1093/nar/gkae268. PMID: 38613393; PMCID: PMC11223838.
 - Lescot M, Déhais P, Thijs G, Marchal K, Moreau Y, Van de Peer Y, Rouzé P, Rombauts S. PlantCARE, a database of plant cis-acting regulatory elements and a portal to tools for in silico analysis of promoter sequences. Nucleic Acids Res. 2002 Jan 1;30(1):325-7. doi: 10.1093/nar/30.1.325. PMID: 11752327; PMCID: PMC99092.
-- Sun P, Jiao B, Yang Y, Shan L, Li T, Li X, Xi Z, Wang X, Liu J. WGDI: A user-friendly toolkit for evolutionary analyses of whole-genome duplications and ancestral karyotypes. Mol Plant. 2022 Dec 5;15(12):1841-1851. doi: 10.1016/j.molp.2022.10.018. Epub 2022 Oct 28. PMID: 36307977.
+- Ødum MT, Teufel F, Thumuluri V, Almagro Armenteros JJ, Johansen AR, Winther O, Nielsen H. DeepLoc 2.1: multi-label membrane protein type prediction using protein language models. Nucleic Acids Res. 2024 Jul 5;52(W1):W215-W220. doi: 10.1093/nar/gkae237. PMID: 38587188; PMCID: PMC11223819.
 
 
 
