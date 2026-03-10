@@ -350,7 +350,13 @@ Anaconda3 will now be installed into this location:
   - Or specify a different location below
 >>> 
 ```
-这里一般情况下是长按Enter即可，但是你也可以选择安装到其他地址，比如我就会安装到移动硬盘里`/Volumes/MyPSD/anaconda3`。
+这里一般情况下是长按Enter即可，但是你也可以选择安装到其他地址，比如我就会安装到移动硬盘里`/Volumes/MyPSD/anaconda3`。随后我们需要运行：
+```bash
+vim ~/.bashrc #有的电脑是~/.zshrc
+export PATH=“/Users/YourUserName/anaconda3/bin:$PATH”
+conda init
+# 重启终端
+```
 
 然后我们才正式进入到安装环节，自此我们把Anaconda3简称为`conda`。首先我们需要了解一个概念叫**环节配置**，我们经常会看到别人说配环境。如何通俗的理解？
 环境的全称是“虚拟环境”，我们可以创建一个新环境，同时规定好`python`版本。我们可能同一道分析使用到的软件依赖于不同版本的`python`，有的是`python3`有的是`python2`，使用我们就需要一个`python3`的虚拟环境和一个python2的虚拟环境。环境像是软件运行必须的氛围，如果把人比作软件，环境就像是图书馆和操场，有人在操场才可以学习（我知道这个例子很奇葩），有人在图书馆才能学习。环境就是软件运行的条件。
