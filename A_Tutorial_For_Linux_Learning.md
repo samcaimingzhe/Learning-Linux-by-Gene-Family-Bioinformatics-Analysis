@@ -765,9 +765,8 @@ python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 但在此之前，我们需要提取这些基因的启动子区域，也就是基因可编码区的上游2000bp。需要用到的软件是`seqkit`：
 ```bash
 mkdir -p promoter
-seqkit grep --pattern "mRNA" annotations/md.gff3 | \
-seqkit subseq --gtf annotations/md.gff3 --up-stream 2000 --only-flank chromosomes/md.chr > promoter/md.promoters.fa
-seqkit grep -f result/md.final.id promoter/md.promoters.fa  -o promoter/md.galt.promoters.fa
+awk '$3=="mRNA"' annotations/md.gff3 | sed '/A_Un/d' > annotations/md.mrna.gff3
+seqkit subseq --gtf annotations/md.mrna.gff3 --up-stream 2000 --only-flank chromosomes/md.chr > promoter/md.promoters.fa
 ```
 给我们获得压缩包后：
 ```bash
