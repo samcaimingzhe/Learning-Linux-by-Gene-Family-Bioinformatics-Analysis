@@ -1,8 +1,6 @@
 # Learning Linux by Gene Family Bioinformatics Analysis
 这篇文章旨在为大家撰写生物信息学基因家族分析方向的毕业论文提供一些指导。
 
-> [基因家族生物信息学分析指北——用生物信息学入门Linux](https://github.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/blob/main/A_Tutorial_For_Linux_Learning.md)
-
 本教程的核心教学目标是Linux的使用：
 
 - 若你并不想接触编程，可重点参考教程的整体框架，了解完成基因家族分析需要借助其他软件执行哪些核心步骤。
