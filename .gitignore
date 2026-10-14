@@ -1,0 +1,8 @@
+# Local analysis workspace and generated caches
+/work/
+.DS_Store
+__MACOSX/
+__pycache__/
+*.py[cod]
+.Rhistory
+.RData
