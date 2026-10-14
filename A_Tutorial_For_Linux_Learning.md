@@ -1,4 +1,9 @@
 # 基因家族生物信息学分析指北——用生物信息学入门Linux
+
+阅读导航：[项目首页](README.md) · [学习路线与章节索引](docs/learning-path.md) · [文件说明与运行约定](docs/usage.md) · [已知问题](docs/known-issues.md)
+
+> 整理说明：原教程内容保留，脚本、数据和配置已分类存放。下文 raw 下载路径对应整理后的目录，需发布到 GitHub 后生效；本地文件位置见运行约定。旧版 `identification.zip` 保留原样，运行前请先查看已知问题，尤其是下载脚本及鉴定脚本的压缩包删除行为。
+
 **致各位亲爱的同学们：**
 
 > 本教程适用于想要学习Linux入门生物信息学的研0学子们。
@@ -22,6 +27,8 @@
 - 基于RNA-seq转录组分析
 - 蛋白互作分析（没写到这）
 - 基于Alphafold的蛋白质3D结构预测（没写到这）
+
+<a id="data-basics"></a>
 
 # 我们来了解一下需要使用到的文件和数据库
 我们所需要的文件本质上都是文本文件，也就是txt，大家平常用记事本打开的。
@@ -100,6 +107,8 @@ GVDQIDGCGFDDRTVGIDGYYDDMNMMSNVNHWGGSVYTNQPIMANDINMY
 - BRAD：十字花科 http://brassicadb.cn/#/
 
 > 特别特别特殊的物种，可以在论文里查看是从哪获取的，可以到NCBI到数据库里再找找看。同时请注意并非所有的基因组都来自公共数据库，他们可能来自一些实验室内部的测序数据。
+
+<a id="case-study"></a>
 
 # 让我们一起开始探索基因家族的宇宙吧！
 我们的操作系统是MacOS，只需要终端，建议安装一个[Warp]( https://www.warp.dev/)。
@@ -307,6 +316,8 @@ mv Antonovka_hapolomeA_CDS.fa md.cds
 如果你想查看当前路径可以用`pwd`，如果想知道当前路径都有什么文件可以使用`ls`，或者更多变体比如`ls -l`、`ls -lah`。如果想看一个文件的内容可以使用`less md.gff3`，退出按`q`。
 于是乎我们拥有了鉴定基因家族蛋白的全部文件了。我们还差什么呢？
 
+<a id="software-setup"></a>
+
 ## 软件安装是个门槛
 我们还需要2个十分重要的软件：
 - `blast`
@@ -432,6 +443,8 @@ sudo make install
 ```
 我想大家已经能感受到本本分分法的麻烦了。确实是麻烦，之后的包我们都用`conda install -c bioconda 软件名`安装。
 
+<a id="family-identification"></a>
+
 ## 开始鉴定基因家族蛋白
 我们首先使用`hmmer`，因为这个最快，先检查是否可以使用`hmmsearch -h`。关于为什么是输入`hmmer`我也不清楚，不同软件的用法都有所差异，这个软件也不需要我们`source ~/.zshrc`。
 ```bash
@@ -496,6 +509,8 @@ seqkit grep -f md.id md.pep -o md.galt.pep
 
 **自此我们可以宣布我们找到了全部可能的苹果GALT基因家族蛋白。**
 
+<a id="batch-identification"></a>
+
 ## 你可曾想过写个脚本批量获取不同物种的GALTs
 这是一个很有挑战的想法，说明你很想了解shell脚本是这么回事，我们安装Anaconda下载的文件就是一个巨大的shell脚本。不过我们会写一个很小很小的shell脚本。
 那我们就定8个物种来做做吧～比如：拟南芥、苹果、梨、橙子、葡萄、草莓、桃子、番茄。
@@ -522,6 +537,8 @@ bash extract_family_proteins.sh
 等我们做到后面就会发现，可能我们发现了20个甚至200个有潜在价值的蛋白质，一做转录组分析看表达量就会大发现。根本没啥表达量，我们就会着重关注表达量高的家族成员。会进一步筛选出更加有分析价值的成员。最后我们很可能只会锁定个位数个成员做qPCR。
 
 所以我们做的家族分析本质上就是一套流程化的分析法。在此仅产生一些小小的思考足矣。
+
+<a id="phylogeny"></a>
 
 # 构建系统发育进化树
 我们需要另一个软件是`clustalw`，这个软件可以进行多序列比对与构建系统发育进化树。
@@ -607,7 +624,7 @@ cat Merged.galt.id
 
 我们会发现这个多剪切本的情况只出现在Cs中，因为序列不多我们可以自己手动删除。这里我贴上删除好的，大家可以自行`vim`一个新的`Merged.galt.id.1`，可以用Excel打开，也可以先`cp Merged.galt.id Merged.galt.id.1`后再删除里面个别剪切本，每一次修改文件都`cp`一份备份，这是一个需要养成的好习惯：
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.1
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/data/examples/Merged.galt.id.1
 seqkit grep -f Merged.galt.id.1 Merged.galt.simplified.pep -o Merged.galt.simplified.1.pep
 clustalw
 ```
@@ -626,13 +643,13 @@ Continue (y/n) ? [y]:
 ```
 也就是说`Csi05G024070.1`跟这些序列遗传距离特别远。我们构建的时候建议删除。所以我们现在需要终止软件。最快的办法就是输入`control + c`，然后：
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.2
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/data/examples/Merged.galt.id.2
 seqkit grep -f Merged.galt.id.2 Merged.galt.simplified.pep -o Merged.galt.simplified.2.pep
 clustalw
 ```
 结果会发现`Csi09G015180.1`依旧没有因为我们删除了其他剪切本而有所变化，所以我们需要继续删除`Csi09G015180.1`更新为`Merged.galt.id.3`:
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/Merged.galt.id.3
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/data/examples/Merged.galt.id.3
 seqkit grep -f Merged.galt.id.3 Merged.galt.simplified.pep -o Merged.galt.simplified.3.pep
 clustalw
 ```
@@ -642,7 +659,7 @@ cp Merged.galt.id.3 rename.id
 ```
 用Excel打开`rename.id`进行操作，可以在第二列按照自己的意愿命名，最后保存为原本的格式就好。这里可以直接下载我处理好的：
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/rename.id
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/data/examples/rename.id
 seqkit replace -p "(.+)" -r '{kv}' -k rename.id Merged.galt.simplified.3.pep > renamed.galt.simplified.pep
 clustalw
 ```
@@ -658,6 +675,8 @@ clustalw
 <img width="12387" height="10154" alt="7GPIRlRDE0ykL5-xb4-WEA" src="https://github.com/user-attachments/assets/59e63e3b-dd8d-4fad-a362-1ee3ec413b1b" />
 
 我们简单把图做成这样。我们经验性认为bootstrap > 70% total bootstrap为一支聚类效果不错的小分支。按照这个小指引以及视觉上的树形来分割亚家族。
+
+<a id="gene-structure"></a>
 
 # Motif、保守结构域与基因结构分析
 我们继续新建一个新的文件夹，把不同分析的文件放在不同路径管理，我会带着大家慢慢养成这个好习惯的：
@@ -683,7 +702,7 @@ mv meme_out/meme.xml Md.renamed.galt.pep plot/
 ## 保守结构域
 之前在Batch CD-Search做了保守结构域预测，但是当时我们的序列ID还是原始的，现在已经修改完了，所以我们继续可以在上传一次`Md.renamed.galt.pep`来获取`hitdata.txt`
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/hitdata.txt
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/data/examples/hitdata.txt
 mv hitdata.txt plot/
 grep '>' plot/hitdata.txt | awk '{print $3 "\t" $6 "\t" $7 "\t" $11}' | sed 's/>//' > cd.info
 ```
@@ -711,7 +730,7 @@ clustalw
 
 以下是我们需要使用到的R脚本与在终端的运行方式：
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/cd_motif_gene_1.0.R
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/scripts/r/cd_motif_gene_1.0.R
 Rscript cd_motif_gene_1.0.R
 ```
 我们最好的形式是在Rstudio中运行：
@@ -733,7 +752,7 @@ Rscript cd_motif_gene_1.0.R
 
 关于结构域的选择，根据半乳糖基转移酶的相关论文，Galactosyl_T是最主要的结构域，部分会发现有DUF4094，但是这个结构域的研究不多，目前被认为是一个无功能但保守的结构域。此外PLN03193和PLN03133在NCBI CDD数据库都注释为beta-1,3半乳糖基转移酶。所以我们在cd_motif_gene_2.0.R中做出了筛选并出图。
 ```bash
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/cd_motif_gene_2.0.R
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/scripts/r/cd_motif_gene_2.0.R
 Rscript cd_motif_gene_2.0.R
 ```
 运行`2.0`会覆盖`1.0`的结果，所以请先运行`1.0`查看一下图片，再运行`2.0`。最后会生成：
@@ -745,6 +764,8 @@ Rscript cd_motif_gene_2.0.R
 组合到一起的图是没有图例的，因为带着图例合并会很不美观。我们采取先合并无图例的，再生成有图例的小图，最后把图例截图。可以选择放到Adobe Illustrator里贴图。当然Microsoft Powerpoint可是个不错的替代：
 <img width="3900" height="1915" alt="plot" src="https://github.com/user-attachments/assets/3414fb44-66aa-45b9-93d9-1448817dbf4e" />
 
+<a id="protein-properties"></a>
+
 # 蛋白理化性质分析
 这是最简单的分析了，因为只需要到[Expasy ProtParam](https://web.expasy.org/protparam/)上上传文件再下载文件，放在Excel里处理一下即可。缺点是只能一个一个上传。在TBtools中有一个插件可以批量进行预测，我想大家应该都是先接触的TBtools。
 
@@ -752,13 +773,17 @@ Rscript cd_motif_gene_2.0.R
 ```bash
 cd ../.. #能回到GeneFamilyAnalysis目录下就好
 pip install BIO
-wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/prot_analyzer.py
+wget https://raw.githubusercontent.com/samcaimingzhe/Learning-Linux-by-Gene-Family-Bioinformatics-Analysis/main/scripts/python/prot_analyzer.py
 python3 prot_analyzer.py motif_cd_gene/Md.renamed.galt.pep > protein_report.txt
 ```
 如果有任何报错就换几个环境，可能与python版本有关系。
 
+<a id="localization"></a>
+
 # 蛋白亚细胞定位
 在网站[DeepLoc - 2.1](https://services.healthtech.dtu.dk/services/DeepLoc-2.1/)上传蛋白质文件即可，最后会获取csv文件。可以直接用Excel打开，再选择需要的放入论文即可。
+
+<a id="cis-elements"></a>
 
 # 顺式作用元件分析（最近好像PlantCARE没法用了，先跳过）
 这个必须得上网站做了，在[PlantCARE](https://bioinformatics.psb.ugent.be/webtools/plantcare/html/)（不知道这个网站目前是不是停运了）。需要使用邮箱，最后过几分钟会发送到邮箱里。
@@ -772,6 +797,8 @@ seqkit subseq --gtf annotations/md.mrna.gff3 --up-stream 2000 --only-flank chrom
 ```bash
 
 ```
+
+<a id="expression"></a>
 
 # RNA-seq转录组分析
 一般来讲需要课题组自己对作物进行各种处理，不管是基因敲除还是化学处理，这些处理都会对基因的转录产生影响，所以转录组数据都是由课题组提供的，一般是一个Excel表格，里面会有控制组和不同处理组的表达数据。可以用R语言非常非常迅速得到一个热图。这里我们找一篇论文里的数据来做示范：
@@ -826,6 +853,8 @@ ggplot(data, aes(x = variable, y = ID, fill = value)) +
 
 总而言之，这一份 RNA-Seq 的样本太多了。平常我们很少会处理到这么多的样本，所以会看到这些格子它都是很高很瘦。一般我们可能处理的样本也就 5-10 个，所以这个里头的样本似乎有 30 多个，就会让这个图的每个格子看起来特别瘦高瘦高的。不管怎样，这就是一个我们非常简单处理 RNA-Seq 的方式，应该算是整个流程中比较简单的部分了，但是它的重点在于如何去解释，所以其实难点在写论文。
 
+<a id="collinearity"></a>
+
 # 共线性分析（我还没写完嘻嘻...）
 最难的家伙来了，非常吃电脑配置，而且在安装上很成问题，总会缺一些包或者python版本不对，很难一次性`conda`。不过依旧请放心，因为坑我都踩过。我们需要使用的`jcvi`需要使用`python=2.7`：
 ```bash
@@ -838,6 +867,8 @@ conda install last -y
 ```
 假设我们只需要处理苹果的文件，我们首先需要把苹果的`gff3`转化为`bed`，比如`python3 -m jcvi.formats.gff bed annotations/md.gff -o beds/md.bed`:
 
+
+<a id="references"></a>
 
 # 参考文献
 
